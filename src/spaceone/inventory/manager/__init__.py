@@ -1,5 +1,1 @@
-from spaceone.inventory.manager.disk_manager import DiskManager
-from spaceone.inventory.manager.subscription_manager import SubscriptionManager
-from spaceone.inventory.manager.snapshot_manager import SnapshotManager
-from spaceone.inventory.manager.vmscaleset_manager import VmScaleSetManager
-from spaceone.inventory.manager.loadbalancer_manager import LoadBalancerManager
+from spaceone.inventory.manager.autonomous_database_manager import AutonomousDatabaseManager

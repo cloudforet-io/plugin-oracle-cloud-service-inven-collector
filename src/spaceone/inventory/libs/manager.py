@@ -3,7 +3,8 @@ from spaceone.inventory.libs.connector import OCIConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
 
 REGION_INFO = {
-    # SAMPLE
+    #  TODO
+    #  SAMPLE
     # 'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164'}},
 }
 
@@ -18,7 +19,7 @@ class OCIManager(BaseManager):
         """ Check collector's status.
         """
         connector: OCIConnector = self.locator.get_connector('OCIConnector', secret_data=secret_data)
-        connector.verify()
+        connector.verify(secret_data)
 
     def collect_cloud_service_type(self):
         for cloud_service_type in self.cloud_service_types:

@@ -19,6 +19,7 @@ class CollectorService(BaseService):
 
         self.execute_managers = [
             # set Oracle cloud service manager
+            'AutonomousDatabaseManager'
         ]
 
     @check_required(['options'])
@@ -44,8 +45,8 @@ class CollectorService(BaseService):
         options = params['options']
         secret_data = params.get('secret_data', {})
         if secret_data != {}:
-            google_manager = OCIManager()
-            active = google_manager.verify({}, secret_data)
+            oci_manager = OCIManager()
+            active = oci_manager.verify({}, secret_data)
 
         return {}
 
@@ -65,7 +66,6 @@ class CollectorService(BaseService):
 
         print("[ EXECUTOR START: Oracle Cloud Service ]")
 
-        # TODO: Thread per cloud services
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             # print("[ EXECUTOR START ]")
             future_executors = []

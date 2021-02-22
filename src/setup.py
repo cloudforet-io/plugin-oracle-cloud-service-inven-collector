@@ -35,6 +35,7 @@ setup(
         'spaceone-api',
         'spaceone-tester',
         'schematics',
+        'oci'
     ],
     zip_safe=False,
 )

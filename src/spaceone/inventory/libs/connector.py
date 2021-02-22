@@ -1,7 +1,8 @@
 import os
-
+import oci
 from spaceone.core.error import *
 from spaceone.core.connector import BaseConnector
+
 
 DEFAULT_SCHEMA = 'azure_client_secret'
 
@@ -16,17 +17,22 @@ class OCIConnector(BaseConnector):
             - secret_data
 
         secret_data(dict)
-            - type: ..
-            - project_id: ...
-            - token_uri: ...
-            - ...
+            - user
+            - key_file
+            - fingerprint
+            - tenancy
+            - region
         """
 
         super().__init__(transaction=None, config=None)
+        self.identity = None
 
     def set_connect(self, secret_data):
-        pass
+        # TODO: Set Oracle Client
+        config = None
+        self.identity = oci.identity.IdentityClient(config)
 
-    def verify(self, **kwargs):
-        self.set_connect(**kwargs)
+    def verify(self, secret_data):
+        # TODO: Verify Oracle Client
+        oci.config.validate_config(secret_data)
         return "ACTIVE"
