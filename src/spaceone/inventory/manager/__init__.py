@@ -1,0 +1,1 @@
+from spaceone.inventory.manager.autonomous_database_manager import AutonomousDatabaseManager
