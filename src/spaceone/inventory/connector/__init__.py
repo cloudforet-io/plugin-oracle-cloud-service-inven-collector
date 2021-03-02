@@ -1,2 +1,3 @@
+from spaceone.inventory.libs.connector import OCIConnector
 from spaceone.inventory.connector.autonomous_database import AutonomousDatabaseConnector
 
