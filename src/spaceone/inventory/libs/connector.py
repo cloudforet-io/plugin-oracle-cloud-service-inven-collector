@@ -34,6 +34,15 @@ class OCIConnector(BaseConnector):
     def set_connect(self, secret_data):
         self.identity_client = IdentityClient(secret_data)
         self.database_client = DatabaseClient(secret_data)
+        '''
+        clients = []
+        for clint in client_list:
+            self.identity_client = IdentityClient(secret_data)
+            self.database_client = DatabaseClient(secret_data)
+        
+        self.clints = clients
+        '''
+
 
     def verify(self, secret_data):
         # TODO: Verify Oracle Client

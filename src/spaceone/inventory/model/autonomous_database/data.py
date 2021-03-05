@@ -15,5 +15,5 @@ class Database(Model):
     def reference(self):
         return {
             "resource_id": self.id,
-            "external_link": "",
+            "external_link": f"https://cloud.oracle.com/db/adb/{self.id}?region={self.region}",
         }
