@@ -30,6 +30,7 @@ class AutonomousDatabaseManager(OCIManager):
         secret_data = params['secret_data']
         adb_conn: AutonomousDatabaseConnector = self.locator.get_connector(self.connector_name, **params)
         adb = []
+        adb = adb_conn.list_of_autonomous_databases()
 
         print(f'** Autonomous Database Finished {time.time() - start_time} Seconds **')
         return adb

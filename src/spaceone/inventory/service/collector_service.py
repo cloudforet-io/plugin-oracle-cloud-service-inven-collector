@@ -76,7 +76,8 @@ class CollectorService(BaseService):
         try:
             identity = IdentityClient(secret_data)
             tenancy = identity.get_tenancy(secret_data["tenancy"]).data
-            regions = identity.list_region_subscriptions(tenancy.id).data
+            region_name = identity.list_region_subscriptions(tenancy.id).data
+            regions = [str(es.region_name) for es in region_name]
             compartments = self.identity_read_compartments(identity, tenancy)
 
             return regions, compartments

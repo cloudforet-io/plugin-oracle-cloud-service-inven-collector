@@ -16,7 +16,7 @@ class AutonomousDatabaseConnector(OCIConnector):
         self.regions = kwargs.get('regions')
         self.compartments = kwargs.get('compartments')
 
-    def list_autonomous_databases(self):
+    def list_of_autonomous_databases(self):
         # TODO
         # Need using Paginator
         result = []
@@ -25,13 +25,15 @@ class AutonomousDatabaseConnector(OCIConnector):
             self.set_connect(self.secret_data)
             for compartment in self.compartments:
                 list_autonomous_db = []
+                if compartment.id != self.secret_data['tenancy'] and \
+                        compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
+                    continue
                 try:
                     list_autonomous_db = oci.pagination.list_call_get_all_results(
                         self.database_client.list_autonomous_databases,
                         compartment.id,
                         sort_by= "TIMECREATED"
                     ).data
-
                     list_autonomous_db.append({'region': region, 'compartment_name': str(compartment.name)})
                     result.append(list_autonomous_db)
 
@@ -48,6 +50,9 @@ class AutonomousDatabaseConnector(OCIConnector):
             self.set_connect(self.secret_data)
             for compartment in self.compartments:
                 list_autonomous_container_db = []
+                if compartment.id != self.secret_data['tenancy'] and \
+                        compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
+                    continue
                 try:
                     list_autonomous_container_db = oci.pagination.list_call_get_all_results(
                         self.database_client.list_autonomous_container_databases,
@@ -69,6 +74,9 @@ class AutonomousDatabaseConnector(OCIConnector):
             self.set_connect(self.secret_data)
             for compartment in self.compartments:
                 list_autonomous_exadata_infra = []
+                if compartment.id != self.secret_data['tenancy'] and \
+                        compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
+                    continue
                 try:
                     list_autonomous_exadata_infra = oci.pagination.list_call_get_all_results(
                         self.database_client.list_autonomous_exadata_infrastructures,
@@ -80,6 +88,7 @@ class AutonomousDatabaseConnector(OCIConnector):
                 except oci.exceptions.ServiceError as e:
                     print(f'[ERROR: OCI API Info]: {e}')
                     continue
+        return result
 
 
 
