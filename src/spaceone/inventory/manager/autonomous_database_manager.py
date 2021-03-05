@@ -22,6 +22,8 @@ class AutonomousDatabaseManager(OCIManager):
                 - schema
                 - secret_data
                 - filter
+                - regions
+                - compartments
         Response:
             CloudServiceResponse
         """

@@ -7,7 +7,10 @@ LOG = {
             'rules': {
                 'Collector.collect': [
                     'secret_data'
-                ]
+                ],
+                'Collector.verify': [
+                    'secret_data'
+                ],
             }
         }
     }

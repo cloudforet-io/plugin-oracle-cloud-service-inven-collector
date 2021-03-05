@@ -3,6 +3,8 @@ import logging
 import concurrent.futures
 from spaceone.inventory.libs.manager import OCIManager
 from spaceone.core.service import *
+from oci.identity.identity_client import IdentityClient
+from oci.pagination import list_call_get_all_results
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -50,6 +52,38 @@ class CollectorService(BaseService):
 
         return {}
 
+    def identity_read_compartments(self,identity, tenancy):
+
+        try:
+            compartments = list_call_get_all_results(
+                identity.list_compartments,
+                tenancy.id,
+                compartment_id_in_subtree=True
+            ).data
+
+            # Add root compartment which is not part of list_compartments
+            compartments.append(tenancy)
+            return compartments
+        except Exception as e:
+            raise RuntimeError("[ERROR: ResourceInfo] Error on identity_read_compartments: " + str(e.args))
+
+
+    def get_params(self, secret_data):
+        compartments = []
+        regions = []
+        tenancy = None
+
+        try:
+            identity = IdentityClient(secret_data)
+            tenancy = identity.get_tenancy(secret_data["tenancy"]).data
+            regions = identity.list_region_subscriptions(tenancy.id).data
+            compartments = self.identity_read_compartments(identity, tenancy)
+
+            return regions, compartments
+
+        except Exception as e:
+            raise RuntimeError("\nError extracting compartment section - " + str(e))
+
     @transaction
     @check_required(['options', 'secret_data', 'filter'])
     def list_resources(self, params):
@@ -66,9 +100,36 @@ class CollectorService(BaseService):
 
         print("[ EXECUTOR START: Oracle Cloud Service ]")
 
+        # get regions
+        # regions
+        # get compartment
+        # compartments
+        regions, compartments = self.get_params(params['secret_data'])
+        #compartment_ids = [comp.id for comp in compartments]
+        params.update({
+            'regions': regions,
+            'compartments': compartments
+        })
+        '''
+        # 여기서부터 파라미터 갱신하고, 매니저까지 넣으면 최고
+        mt_params = []
+        secret_data = params['secret_data']
+        for region_name in [str(es.region_name) for es in regions]:
+            for execute_manager in self.execute_managers:
+                secret_data['region'] = region_name
+                value = {
+                    'region': region_name,
+                    'compartment_id': compartment_id,
+                    'secret_data': secret_data,
+                    'manager': execute_manager
+                }
+                mt_params.append(value)
+                
+        '''
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             # print("[ EXECUTOR START ]")
             future_executors = []
+
             for execute_manager in self.execute_managers:
                 print(f'@@@ {execute_manager} @@@')
                 _manager = self.locator.get_manager(execute_manager)

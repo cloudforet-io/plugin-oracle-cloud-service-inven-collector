@@ -1,5 +1,6 @@
-import os
 import oci
+from oci.identity import IdentityClient
+from oci.database.database_client import DatabaseClient
 from spaceone.core.error import *
 from spaceone.core.connector import BaseConnector
 
@@ -15,6 +16,8 @@ class OCIConnector(BaseConnector):
             - schema
             - options
             - secret_data
+            - regions
+            - compartments
 
         secret_data(dict)
             - user
@@ -25,16 +28,12 @@ class OCIConnector(BaseConnector):
         """
 
         super().__init__(transaction=None, config=None)
-        self.client = None
+        self.identity_client = None
+        self.database_client = None
 
     def set_connect(self, secret_data):
-        # TODO: Set Oracle Client
-        os.environ["USER_ID"] = secret_data['user']
-        os.environ["KEY_CONTENT"] = secret_data['key_content']
-        os.environ["FINGERPRINT"] = secret_data['fingerprint']
-        os.environ["TENANCY"] = secret_data['tenancy']
-        os.environ["OCI_REGION"] = secret_data['region']
-        self.client = oci.identity.IdentityClient(secret_data)
+        self.identity_client = IdentityClient(secret_data)
+        self.database_client = DatabaseClient(secret_data)
 
     def verify(self, secret_data):
         # TODO: Verify Oracle Client
