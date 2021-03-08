@@ -33,8 +33,8 @@ class AutonomousDatabaseManager(OCIManager):
         compartments = params['compartments']
         adb_conn: AutonomousDatabaseConnector = self.locator.get_connector(self.connector_name, **params)
         autonomous_database_list = []
-        adb_container = []
-        adb_exadata_infra = []
+        #adb_container = []
+        #adb_exadata_infra = []
         #
         # for autonomous_database in autonomous_databases:
         #     pprint(autonomous_database)
@@ -47,7 +47,9 @@ class AutonomousDatabaseManager(OCIManager):
                 if basic_adb_list:
                      ddd = self._set_mandatory_param(basic_adb_list, region, compartment.name)
                      pprint(ddd)
-                #autonomous_database_list.append()
+                     #autonomous_database_list.append()
+                     # Must set_region_code method for region collection
+                     self.set_region_code(ddd['region'])
 
 
         print(f'** Autonomous Database Finished {time.time() - start_time} Seconds **')

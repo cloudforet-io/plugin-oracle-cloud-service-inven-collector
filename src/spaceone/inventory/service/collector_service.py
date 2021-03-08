@@ -68,7 +68,7 @@ class CollectorService(BaseService):
             raise RuntimeError("[ERROR: ResourceInfo] Error on identity_read_compartments: " + str(e.args))
 
 
-    def get_params(self, secret_data):
+    def get_regions_and_compartment(self, secret_data):
         compartments = []
         regions = []
         tenancy = None
@@ -105,12 +105,21 @@ class CollectorService(BaseService):
         # regions
         # get compartment
         # compartments
-        regions, compartments = self.get_params(params['secret_data'])
+        regions, compartments = self.get_regions_and_compartment(params['secret_data'])
         #compartment_ids = [comp.id for comp in compartments]
         params.update({
             'regions': regions,
             'compartments': compartments
         })
+
+        multi_thread_params = [{
+            'region': '',
+            'compartment_id': '',
+            'client': ''
+        },{
+
+        },...
+        ]
         '''
         # 여기서부터 파라미터 갱신하고, 매니저까지 넣으면 최고
         mt_params = []
@@ -135,7 +144,10 @@ class CollectorService(BaseService):
                 print(f'@@@ {execute_manager} @@@')
                 _manager = self.locator.get_manager(execute_manager)
                 future_executors.append(executor.submit(_manager.collect_resources, params))
-
+                '''
+                for param in multi_thread_params:
+                    future_executors.append(executor.submit(_manager.collect_resources, param))
+                '''
             for future in concurrent.futures.as_completed(future_executors):
                 for result in future.result():
                     yield result.to_primitive()

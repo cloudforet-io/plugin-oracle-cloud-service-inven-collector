@@ -70,7 +70,6 @@ class OCIManager(BaseManager):
         except Exception as e:
             print(f'[ERROR: ResourceInfo]: {e}')
 
-
     def collect_cloud_service_type(self):
         for cloud_service_type in self.cloud_service_types:
             yield cloud_service_type
