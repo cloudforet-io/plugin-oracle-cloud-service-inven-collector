@@ -49,7 +49,7 @@ class AutonomousDatabaseManager(OCIManager):
                      pprint(ddd)
                      #autonomous_database_list.append()
                      # Must set_region_code method for region collection
-                     self.set_region_code(ddd['region'])
+                     self.set_region_code(region)
 
 
         print(f'** Autonomous Database Finished {time.time() - start_time} Seconds **')

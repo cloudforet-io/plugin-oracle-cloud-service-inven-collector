@@ -72,13 +72,14 @@ class Database(Model):
     key_store_id = StringType(deserialize_from='_key_store_id')
     key_store_wallet_name = StringType(deserialize_from='_key_store_wallet_name')
     license_model = StringType(deserialize_from='_license_model')
-    lifecycle_details = StringType(deserialize_from='_lifecycle_details',
+    lifecycle_state = StringType(deserialize_from='_lifecycle_state',
                                    choices=('PROVISIONING', 'AVAILABLE', 'STOPPING', 'STOPPED', 'STARTING',
                                             'TERMINATING', 'TERMINATED', 'UNAVAILABLE', 'RESTORE_IN_PROGRESS',
                                             'RESTORE_FAILED', 'BACKUP_IN_PROGRESS', 'SCALE_IN_PROGRESS',
                                             'AVAILABLE_NEEDS_ATTENTION', 'UPDATING', 'MAINTENANCE_IN_PROGRESS',
                                             'RESTARTING', 'RECREATING', 'ROLE_CHANGE_IN_PROGRESS', 'UPGRADING',
                                             'UNKNOWN_ENUM_VALUE'))
+    lifecycle_details = StringType(deserialize_from='_lifecycle_details')
     nsg_ids = ListType(StringType(), deserialize_from='_nsg_ids')
     open_mode = StringType(deserialize_from='_open_mode', choices=('READ_ONLY', 'READ_WRITE', 'UNKNOWN_ENUM_VALUE'))
     operations_insights_status = StringType(deserialize_from='_operations_insights_status',
@@ -111,7 +112,7 @@ class Database(Model):
     time_reclamation_of_free_autonomous_database = DateTimeType(deserialize_from=
                                                                 '_time_reclamation_of_free_autonomous_database')
     used_data_storage_size_in_tbs = IntType(deserialize_from='_used_data_storage_size_in_tbs')
-    whitelisted_ips = ListType(deserialize_from='_whitelisted_ips')
+    whitelisted_ips = ListType(StringType(),deserialize_from='_whitelisted_ips')
 
     def reference(self):
         return {
