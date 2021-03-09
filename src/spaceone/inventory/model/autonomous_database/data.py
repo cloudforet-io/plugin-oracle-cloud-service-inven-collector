@@ -35,6 +35,40 @@ class Define_tags(Model):
     pass
 
 
+class Autonomous_Backup(Model):
+    autonomous_id = StringType(deserialize_from='_autonomous_id')
+    compartment_id = StringType(deserialize_from='_compartment_id')
+    database_size_in_tbs = FloatType(deserialize_from='_database_size_in_tbs')
+    display_name = StringType(deserialize_from='_display_name')
+    id = StringType(deserialize_from='_id')
+    is_automatic = BooleanType(deserialize_from='_is_automatic')
+    is_restorable = BooleanType(deserialize_from='_is_restorable')
+    key_store_id = StringType(deserialize_from='_key_store_id')
+    key_store_wallet_name = StringType(deserialize_from='_key_store_wallet_name')
+    lifecycle_details = StringType(deserialize_from='_lifecycle_details')
+    lifecycle_state = StringType(deserialize_from='_lifecycle_state',
+                                 choices=('CREATING', 'ACTIVE', 'DELETING',
+                                          'DELETED', 'FAILED', 'UNKNOWN_ENUM_VALUE'))
+    time_ended = DateTimeType(deserialize_from='_time_ended')
+    time_started = DateTimeType(deserialize_from='_time_started')
+    _type = StringType(deserialize_from='_type')
+
+
+class Autonomous_database_clones(Model):
+    display_name = StringType(deserialize_from='_display_name')
+    db_name = StringType(deserialize_from='_db_name')
+    lifecycle_state = StringType(deserialize_from='_lifecycle_state',
+                                   choices=('PROVISIONING', 'AVAILABLE', 'STOPPING', 'STOPPED', 'STARTING',
+                                            'TERMINATING', 'TERMINATED', 'UNAVAILABLE', 'RESTORE_IN_PROGRESS',
+                                            'RESTORE_FAILED', 'BACKUP_IN_PROGRESS', 'SCALE_IN_PROGRESS',
+                                            'AVAILABLE_NEEDS_ATTENTION', 'UPDATING', 'MAINTENANCE_IN_PROGRESS',
+                                            'RESTARTING', 'RECREATING', 'ROLE_CHANGE_IN_PROGRESS', 'UPGRADING',
+                                            'UNKNOWN_ENUM_VALUE'))
+    last_refresh = DateTimeType(deserialize_from='_time_of_last_refresh')
+    time_of_last_refresh_point = DateTimeType(deserialize_from='_time_of_last_refresh_point')
+
+
+
 class Database(Model):
     compartment_name = StringType(deserialize_from='compartment_name')
     region = StringType(deserialize_from='region')
@@ -65,6 +99,7 @@ class Database(Model):
                                      choices=('CLOUD', 'CLOUD_AT_CUSTOMER', 'UNKNOWN_ENUM_VALUE'))
     is_access_control_enabled = BooleanType(deserialize_from='_is_access_control_enabled')
     is_auto_scaling_enabled = BooleanType(deserialize_from='_is_auto_scaling_enabled')
+    is_data_guard_enable = BooleanType(deserialize_from='_is_data_guard_enabled')
     is_dedicated = BooleanType(deserialize_from='_is_dedicated')
     is_free_tier = BooleanType(deserialize_from='_is_free_tier')
     is_preview = BooleanType(deserialize_from='_is_preview')
@@ -92,6 +127,7 @@ class Database(Model):
     private_endpoint_label = StringType(deserialize_from='_private_endpoint_label')
     refreshable_mode = StringType(deserialize_from='_refreshable_mode', choices=('AUTOMATIC', 'MANUAL',
                                                                                  'UNKNOWN_ENUM_VALUE'))
+    refreshable_status = StringType(deserialize_from='_refreshable_status', choices=('REFRESHING', 'NOT_REFRESHING'))
     role = StringType(deserialize_from='_role', choices=('PRIMARY', 'STANDBY', 'DISABLED_STANDBY',
                                                          'UNKNOWN_ENUM_VALUE'))
     service_console_url = StringType(deserialize_from='_service_console_url')
@@ -113,6 +149,8 @@ class Database(Model):
                                                                 '_time_reclamation_of_free_autonomous_database')
     used_data_storage_size_in_tbs = IntType(deserialize_from='_used_data_storage_size_in_tbs')
     whitelisted_ips = ListType(StringType(),deserialize_from='_whitelisted_ips')
+    list_autonomous_backup = ListType(ModelType(Autonomous_Backup), default=[])
+    list_autonomous_database_clones = ListType(ModelType(Autonomous_database_clones), default=[])
 
     def reference(self):
         return {
