@@ -68,7 +68,6 @@ class Autonomous_database_clones(Model):
     time_of_last_refresh_point = DateTimeType(deserialize_from='_time_of_last_refresh_point')
 
 
-
 class Database(Model):
     compartment_name = StringType(deserialize_from='compartment_name')
     region = StringType(deserialize_from='region')
@@ -87,14 +86,14 @@ class Database(Model):
                                             'DEREGISTERING', 'NOT_REGISTERED',
                                             'FAILED', 'UNKNOWN_ENUM_VALUE'))
     data_storage_size_in_gbs = IntType(deserialize_from='_data_storage_size_in_gbs')
-    data_storage_size_in_tbs = IntType(deserialize_from='_data_storage_size_in_tbs')
+    data_storage_size_in_tbs = FloatType(deserialize_from='_data_storage_size_in_tbs')
     db_name = StringType(deserialize_from='_db_name')
     db_version = StringType(deserialize_from='_db_version')
     db_workload = StringType(deserialize_from='_db_workload')
-    define_tags = ListType(ModelType(Define_tags), deserialize_from='_defined_tags', default=[])
+    #define_tags = ListType(ModelType(Define_tags), deserialize_from='_defined_tags', default=[])
     display_name = StringType(deserialize_from='_display_name')
     failed_data_recovery_in_seconds = IntType(deserialize_from='_failed_data_recovery_in_seconds')
-    freeform_tags = ListType(ModelType(Tags), default=[])
+    freeform_tags = ListType(ModelType(Tags), deserialize_from='_freeform_tags', default=[])
     infrastructure_type = StringType(deserialize_from='_infrastructure_type',
                                      choices=('CLOUD', 'CLOUD_AT_CUSTOMER', 'UNKNOWN_ENUM_VALUE'))
     is_access_control_enabled = BooleanType(deserialize_from='_is_access_control_enabled')
@@ -120,8 +119,7 @@ class Database(Model):
     operations_insights_status = StringType(deserialize_from='_operations_insights_status',
                                             choices=('ENABLING', 'ENABLED', 'DISABLING', 'NOT_ENABLED',
                                                      'FAILED_ENABLING', 'FAILED_DISABLING', 'UNKNOWN_ENUM_VALUE'))
-    permission_level = StringType(deserialize_from='_permission_level', choices=('RESTRICTED', 'UNRESTRICTED'
-                                                                                 'UNKNOWN_ENUM_VALUE'))
+    permission_level = StringType(deserialize_from='_permission_level')
     private_endpoint = StringType(deserialize_from='_private_endpoint')
     private_endpoint_ip = StringType(deserialize_from='_private_endpoint_ip')
     private_endpoint_label = StringType(deserialize_from='_private_endpoint_label')
@@ -134,7 +132,7 @@ class Database(Model):
     source_id = StringType(deserialize_from='_source_id')
     standby_whitelisted_ips = ListType(StringType(), deserialize_from='_standby_whitelisted_ips')
     subnet_id = StringType(deserialize_from='_subnet_id')
-    system_tags = ModelType(Define_tags, deserialize_from='_system_tags')
+    #system_tags = ModelType(Define_tags, deserialize_from='_system_tags')
     time_created = DateTimeType(deserialize_from='_time_created')
     time_deletion_of_free_autonomous_database = DateTimeType(deserialize_from=
                                                              'time_deletion_of_free_autonomous_database')

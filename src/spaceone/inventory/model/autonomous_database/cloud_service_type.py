@@ -33,7 +33,7 @@ cst_adb._metadata = CloudServiceTypeMeta.set_meta(
                                                                     'indigo.500': ['true'],
                                                                     'coral.600': ['false'], }),
         TextDyField.data_source('OCPUs', 'data.cpu_core_count'),
-        TextDyField.data_source('Storage (GB)', 'data.data_storage_size_in_gbs'),
+        TextDyField.data_source('Storage (TB)', 'data.data_storage_size_in_tbs'),
         TextDyField.data_source('Workload Type', 'data.db_workload'),
         EnumDyField.data_source('Autonomous Data Guard', 'data.is_data_guard_enable',
                                 default_badge={

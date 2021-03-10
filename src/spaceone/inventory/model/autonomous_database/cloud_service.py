@@ -146,7 +146,7 @@ refresh_clone_meta = \
                                           ])
 
 # TAB - tags
-database_tags = TableDynamicLayout.set_fields('Tags', 'data.tags', fields=[
+database_tags = TableDynamicLayout.set_fields('Tags', 'data.freeform_tags', fields=[
     TextDyField.data_source('Key', 'key'),
     TextDyField.data_source('Value', 'value')
 ])

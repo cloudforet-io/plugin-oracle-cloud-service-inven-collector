@@ -16,8 +16,6 @@ class AutonomousDatabaseConnector(OCIConnector):
         #self.regions = kwargs.get('regions')
         #self.compartments = kwargs.get('compartments')
 
-
-
     def list_of_autonomous_databases(self, region, compartment):
         result = []
         if compartment.id != self.secret_data['tenancy'] and \
@@ -44,6 +42,33 @@ class AutonomousDatabaseConnector(OCIConnector):
 
         return result
 
+    def list_autonomous_database_backup(self, autonomous_db_id):
+        result = []
+
+        try:
+            result = self.database_client\
+                            .list_autonomous_database_backups(autonomous_database_id=autonomous_db_id,
+                                                             sort_by='TIMECREATED').data
+        except oci.exceptions.ServiceError as e:
+            print(f'[ERROR: OCI API Info]: {e}')
+            pass
+
+        return result
+
+    def list_autonomous_database_clones(self,compartment_id, autonomous_db_id):
+        result = []
+        try:
+            result = self.database_client.\
+                    list_autonomous_database_clones(
+                                        compartment_id=compartment_id,
+                                        autonomous_database_id=autonomous_db_id).data
+
+        except oci.exceptions.ServiceError as e:
+            print(f'[ERROR: OCI API Info]: {e}')
+            pass
+
+        return result
+
     def list_autonomous_container_database(self,region, compartment):
         result = []
         list_autonomous_container_db = []
@@ -62,7 +87,7 @@ class AutonomousDatabaseConnector(OCIConnector):
 
             except oci.exceptions.ServiceError as e:
                 print(f'[ERROR: OCI API Info]: {e}')
-                raise
+                pass
 
         return result
 
@@ -83,7 +108,7 @@ class AutonomousDatabaseConnector(OCIConnector):
                 result.append(list_autonomous_exadata_infra)
             except oci.exceptions.ServiceError as e:
                 print(f'[ERROR: OCI API Info]: {e}')
-                raise
+                pass
         return result
 
 
