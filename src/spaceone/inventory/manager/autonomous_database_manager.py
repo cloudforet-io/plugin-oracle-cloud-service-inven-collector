@@ -4,7 +4,6 @@ from spaceone.inventory.model.autonomous_database import *
 from spaceone.inventory.model.autonomous_database.cloud_service import *
 from spaceone.inventory.connector.autonomous_database import AutonomousDatabaseConnector
 from spaceone.inventory.model.autonomous_database.cloud_service_type import CLOUD_SERVICE_TYPES
-from datetime import datetime
 from pprint import pprint
 import time
 
@@ -33,9 +32,6 @@ class AutonomousDatabaseManager(OCIManager):
         compartments = params['compartments']
         adb_conn: AutonomousDatabaseConnector = self.locator.get_connector(self.connector_name, **params)
         autonomous_database_list = []
-        #
-        # for autonomous_database in autonomous_databases:
-        #     pprint(autonomous_database)
 
         for region in regions:
             secret_data['region'] = region
@@ -44,7 +40,6 @@ class AutonomousDatabaseManager(OCIManager):
                 basic_adb_list = adb_conn.list_of_autonomous_databases(region, compartment)
                 if basic_adb_list:
                     raw_data = self._set_mandatory_param(adb_conn, basic_adb_list, region, compartment.name)
-                    pprint(raw_data)
 
                     # Must set_region_code method for region collection
                     self.set_region_code(region)
@@ -78,7 +73,7 @@ class AutonomousDatabaseManager(OCIManager):
                 'compartment_name': comp_name,
                 '_freeform_tags': self.convert_tags(adb_primitives['_freeform_tags']),
                 '_db_workload': self._set_workload_type(adb_primitives['_db_workload']),
-                '_data_storage_size_in_tbs': self.gbs_to_tbs(adb_primitives['_data_storage_size_in_tbs']),
+                '_data_storage_size_in_tbs': self.gbs_to_tbs(adb_primitives['_data_storage_size_in_gbs']),
                 '_license_model': self.define_license_type(adb_primitives['_license_model']),
                 '_permission_level': self.define_permission_level(adb_primitives['_permission_level']),
                 'list_autonomous_backup': self._set_backup_list(
@@ -143,31 +138,3 @@ class AutonomousDatabaseManager(OCIManager):
             permission_level = 'Allow secure access from everywhere'
 
         return permission_level
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

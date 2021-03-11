@@ -13,8 +13,6 @@ class AutonomousDatabaseConnector(OCIConnector):
         super().__init__(**kwargs)
         self.secret_data = kwargs.get('secret_data')
         self.set_connect(kwargs.get('secret_data'))
-        #self.regions = kwargs.get('regions')
-        #self.compartments = kwargs.get('compartments')
 
     def list_of_autonomous_databases(self, region, compartment):
         result = []
@@ -23,6 +21,7 @@ class AutonomousDatabaseConnector(OCIConnector):
             pass
         else:
             try:
+
                 list_autonomous_db = oci.pagination.list_call_get_all_results(
                     self.database_client.list_autonomous_databases,
                     compartment.id,
@@ -30,12 +29,7 @@ class AutonomousDatabaseConnector(OCIConnector):
                 ).data
 
                 result = list_autonomous_db
-                '''
-                for autonomous_db in list_autonomous_db: #vars(autonomous_db).update({'region': region, 'compartment_name': str(compartment.name)})
-                    dict_autonomous_db = dict_from_class(autonomous_db)
-                    dict_autonomous_db.update({'region': region, 'compartment_name': str(compartment.name)})
-                    result.append(dict_autonomous_db)
-                '''
+
             except oci.exceptions.ServiceError as e:
                 print(f'[ERROR: OCI API Info]: {e}')
                 pass
@@ -104,7 +98,6 @@ class AutonomousDatabaseConnector(OCIConnector):
                     compartment.id,
                     sort_by= "TIMECREATED"
                 ).data
-                #list_autonomous_exadata_infra.append({'region': region, 'compartment_name': str(compartment.name)})
                 result.append(list_autonomous_exadata_infra)
             except oci.exceptions.ServiceError as e:
                 print(f'[ERROR: OCI API Info]: {e}')
