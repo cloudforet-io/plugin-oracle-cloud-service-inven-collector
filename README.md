@@ -25,8 +25,8 @@ Registered service account on SpaceONE must have certain permissions to collect 
 
 ### Contents
 - Table of Contents
-  - [Database]()
-    - [AutonomousDatabase](#Database)
+  - [Database](#Database)
+    - [AutonomousDatabase](#AutonomousDatabase)
     
 --- 
 
