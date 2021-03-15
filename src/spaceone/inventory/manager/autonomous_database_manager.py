@@ -37,7 +37,7 @@ class AutonomousDatabaseManager(OCIManager):
             secret_data['region'] = region
             adb_conn.set_connect(secret_data)
             for compartment in compartments:
-                basic_adb_list = adb_conn.list_of_autonomous_databases(region, compartment)
+                basic_adb_list = adb_conn.list_of_autonomous_databases(compartment)
                 if basic_adb_list:
                     raw_data = self._set_mandatory_param(adb_conn, basic_adb_list, region, compartment.name)
 

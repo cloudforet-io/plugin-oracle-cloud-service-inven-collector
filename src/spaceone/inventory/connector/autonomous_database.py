@@ -14,7 +14,7 @@ class AutonomousDatabaseConnector(OCIConnector):
         self.secret_data = kwargs.get('secret_data')
         self.set_connect(kwargs.get('secret_data'))
 
-    def list_of_autonomous_databases(self, region, compartment):
+    def list_of_autonomous_databases(self, compartment):
         result = []
         if compartment.id != self.secret_data['tenancy'] and \
                 compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
