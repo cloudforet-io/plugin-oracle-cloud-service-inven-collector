@@ -3,9 +3,6 @@ from spaceone.inventory.libs.connector import OCIConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
 
 REGION_INFO = {
-    #  TODO
-    #  SAMPLE
-    # 'eastus': {'name': 'US East (Virginia)', 'tags': {'latitude': '37.3719', 'longitude': '-79.8164'}},
     'ap-sydney-1': {'name': 'Australia East (Sydney)',
                     'tags': {'latitude': '-33.795606497812734', 'longitude': '151.14310024060555'}},
     'ap-melbourne-1': {'name': 'Australia Southeast (Melbourne)',
