@@ -12,6 +12,17 @@ MAX_WORKER = 20
 SUPPORTED_FEATURES = ['garbage_collection']
 SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType', 'inventory.Region']
 FILTER_FORMAT = []
+DEFAULT_REGION = (
+    'ap-seoul-1',
+    'us-ashburn-1',
+    'ap-chuncheon-1',
+    'ap-tokyo-1',
+    'eu-frankfurt-1',
+    'sa-saopaulo-1',
+    'us-phoenix-1',
+    'ca-montreal-1',
+    'uk-london-1'
+)
 
 
 def identity_read_compartments(identity, tenancy):
@@ -28,6 +39,23 @@ def identity_read_compartments(identity, tenancy):
         return compartments
     except Exception as e:
         raise RuntimeError("[ERROR: ResourceInfo] Error on identity_read_compartments: " + str(e.args))
+
+
+def set_default_region(secret_data):
+
+    for default_region in DEFAULT_REGION:
+        secret_data.update({'region': default_region})
+        try:
+            identity = IdentityClient(secret_data)
+            identity.get_user(secret_data['user'])
+        except Exception as e:
+            print("[ERROR: Collector_Service] Error on set_default_region: " + str(e.args))
+            pass
+        else:
+            break
+    return secret_data
+
+
 
 
 @authentication_handler
@@ -81,10 +109,10 @@ class CollectorService(BaseService):
             regions = [str(es.region_name) for es in region_name]
             compartments = identity_read_compartments(identity, tenancy)
 
-            return regions, compartments
-
         except Exception as e:
             raise RuntimeError("\nError extracting compartment section - " + str(e))
+
+        return regions, compartments
 
     @transaction
     @check_required(['options', 'secret_data', 'filter'])
@@ -101,7 +129,7 @@ class CollectorService(BaseService):
         start_time = time.time()
 
         print("[ EXECUTOR START: Oracle Cloud Service ]")
-
+        params['secret_data'] = set_default_region(params['secret_data'])
         regions, compartments = self.get_regions_and_compartment(params['secret_data'])
         params.update({
             'regions': regions,
