@@ -1,7 +1,8 @@
 from schematics.types import ModelType, StringType, PolyModelType
 
 from spaceone.inventory.model.autonomous_database.data import Database
-from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField, EnumDyField, ListDyField
+from spaceone.inventory.libs.schema.metadata.dynamic_field import TextDyField, DateTimeDyField,\
+                                                                  EnumDyField, ListDyField, SizeField
 from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLayout, TableDynamicLayout, \
     ListDynamicLayout
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
@@ -11,7 +12,7 @@ Autonomous Database Information
 '''
 general_info_meta = ItemDynamicLayout.set_fields('General Information', fields=[
     TextDyField.data_source('Display Name', 'data.display_name'),
-    TextDyField.data_source('Workload Type', 'data.db_workload'),
+    TextDyField.data_source('Workload Type', 'data.db_workload_display'),
     TextDyField.data_source('Region', 'data.region'),
     TextDyField.data_source('Compartment', 'data.compartment_name'),
     TextDyField.data_source('OCID', 'data.id'),

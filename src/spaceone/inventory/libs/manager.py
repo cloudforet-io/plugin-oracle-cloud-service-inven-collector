@@ -51,10 +51,14 @@ REGION_INFO = {
 
 
 class OCIManager(BaseManager):
-    connector_name = None
-    cloud_service_types = []
-    response_schema = None
-    collected_region_codes = []
+
+    def __init__(self, transaction, **kwargs):
+        super().__init__(transaction, **kwargs)
+
+        self.connector_name = None
+        self.cloud_service_types = []
+        self.response_schema = None
+        self.collected_region_codes = []
 
     def verify(self, options, secret_data, **kwargs):
         """ Check collector's status.
@@ -77,7 +81,7 @@ class OCIManager(BaseManager):
     def collect_resources(self, params) -> list:
         resources = []
 
-        resources.extend(self.collect_cloud_service_type())
+        # resources.extend(self.collect_cloud_service_type())
         resources.extend(self.collect_cloud_service(params))
         resources.extend(self.collect_region())
 
@@ -146,5 +150,9 @@ class OCIManager(BaseManager):
                     vm_dict[k] = vm_converse_dict
 
         return vm_dict
+
+    @staticmethod
+    def gigabyte_to_byte(gigabyte):
+        return 1073741824*gigabyte
 
 
