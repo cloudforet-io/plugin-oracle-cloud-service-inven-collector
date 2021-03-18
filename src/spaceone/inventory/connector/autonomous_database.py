@@ -16,23 +16,18 @@ class AutonomousDatabaseConnector(OCIConnector):
 
     def list_of_autonomous_databases(self, compartment):
         result = []
-        if compartment.id != self.secret_data['tenancy'] and \
-                compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
+        try:
+            list_autonomous_db = oci.pagination.list_call_get_all_results(
+                self.database_client.list_autonomous_databases,
+                compartment.id,
+                sort_by= "TIMECREATED"
+            ).data
+
+            result = list_autonomous_db
+
+        except oci.exceptions.ServiceError as e:
+            print(f'[ERROR: OCI API Info]: {e}')
             pass
-        else:
-            try:
-
-                list_autonomous_db = oci.pagination.list_call_get_all_results(
-                    self.database_client.list_autonomous_databases,
-                    compartment.id,
-                    sort_by= "TIMECREATED"
-                ).data
-
-                result = list_autonomous_db
-
-            except oci.exceptions.ServiceError as e:
-                print(f'[ERROR: OCI API Info]: {e}')
-                pass
 
         return result
 
@@ -66,42 +61,38 @@ class AutonomousDatabaseConnector(OCIConnector):
     def list_autonomous_container_database(self,region, compartment):
         result = []
         list_autonomous_container_db = []
-        if compartment.id != self.secret_data['tenancy'] and \
-                compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
-            pass
-        else:
-            try:
-                list_autonomous_container_db = oci.pagination.list_call_get_all_results(
-                    self.database_client.list_autonomous_container_databases,
-                    compartment.id,
-                    sort_by="TIMECREATED"
-                ).data
-                list_autonomous_container_db.append({'region': region, 'compartment_name': str(compartment.name)})
-                result.append(list_autonomous_container_db)
 
-            except oci.exceptions.ServiceError as e:
-                print(f'[ERROR: OCI API Info]: {e}')
-                pass
+        try:
+            list_autonomous_container_db = oci.pagination.list_call_get_all_results(
+                self.database_client.list_autonomous_container_databases,
+                compartment.id,
+                sort_by="TIMECREATED"
+            ).data
+            list_autonomous_container_db.append({'region': region, 'compartment_name': str(compartment.name)})
+            result.append(list_autonomous_container_db)
+
+        except oci.exceptions.ServiceError as e:
+            print(f'[ERROR: OCI API Info]: {e}')
+            pass
 
         return result
 
     def list_autonomous_exadata_infrastructures(self, region, compartment):
         result = []
         list_autonomous_exadata_infra = []
-        if compartment.id != self.secret_data['tenancy'] and \
-                compartment.lifecycle_state != oci.identity.models.Compartment.LIFECYCLE_STATE_ACTIVE:
+
+
+        try:
+            list_autonomous_exadata_infra = oci.pagination.list_call_get_all_results(
+                self.database_client.list_autonomous_exadata_infrastructures,
+                compartment.id,
+                sort_by= "TIMECREATED"
+            ).data
+            result.append(list_autonomous_exadata_infra)
+        except oci.exceptions.ServiceError as e:
+            print(f'[ERROR: OCI API Info]: {e}')
             pass
-        else:
-            try:
-                list_autonomous_exadata_infra = oci.pagination.list_call_get_all_results(
-                    self.database_client.list_autonomous_exadata_infrastructures,
-                    compartment.id,
-                    sort_by= "TIMECREATED"
-                ).data
-                result.append(list_autonomous_exadata_infra)
-            except oci.exceptions.ServiceError as e:
-                print(f'[ERROR: OCI API Info]: {e}')
-                pass
+
         return result
 
 

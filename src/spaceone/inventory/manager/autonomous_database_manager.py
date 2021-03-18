@@ -8,11 +8,14 @@ import time
 
 
 class AutonomousDatabaseManager(OCIManager):
-    connector_name = 'AutonomousDatabaseConnector'
-    cloud_service_types = CLOUD_SERVICE_TYPES
+
+    def __init__(self, transaction, **kwargs):
+        super().__init__(transaction, **kwargs)
+        self.connector_name = 'AutonomousDatabaseConnector'
+        self.cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print("** Autonomous Database START **")
+        print(f"** Autonomous Database START ** // {params.get('region')} // {params.get('compartment').name}")
         start_time = time.time()
         """
         Args:
@@ -21,17 +24,59 @@ class AutonomousDatabaseManager(OCIManager):
                 - schema
                 - secret_data
                 - filter
-                - regions
-                - compartments
+                - region
+                - compartment
         Response:
             CloudServiceResponse
         """
         secret_data = params['secret_data']
-        regions = params['regions']
-        compartments = params['compartments']
+        region = params['region']
+        compartment = params['compartment']
+
+        secret_data.update({'region': region})
         adb_conn: AutonomousDatabaseConnector = self.locator.get_connector(self.connector_name, **params)
         autonomous_database_list = []
+        adb_conn.set_connect(secret_data)
+        basic_adb_list = adb_conn.list_of_autonomous_databases(params['compartment'])
 
+        for basic_adb in basic_adb_list:
+            adb_raw = self.convert_nested_dictionary(self, basic_adb)
+            adb_raw.update({
+                'region': region,
+                'compartment_name': compartment.name,
+                '_freeform_tags': self.convert_tags(adb_raw['_freeform_tags']),
+                'db_workload_display': self._set_workload_type(adb_raw['_db_workload']),
+                'size': OCIManager.gigabyte_to_byte(adb_raw['_data_storage_size_in_gbs']),  # 바이트 단위로 정규화 후 넣어주기
+                '_data_storage_size_in_tbs': self.gbs_to_tbs(adb_raw['_data_storage_size_in_gbs']),
+                '_license_model': self.define_license_type(adb_raw['_license_model']),
+                '_permission_level': self.define_permission_level(adb_raw['_permission_level']),
+                'list_autonomous_backup': self._set_backup_list(
+                    adb_conn.list_autonomous_database_backup(adb_raw['_id'])),
+                'list_autonomous_database_clones': self._set_clone_list(
+                    adb_conn.list_autonomous_database_clones(adb_raw['_compartment_id'],
+                                                             adb_raw['_id']))
+            })
+
+            autonomous_db_data = Database(adb_raw, strict=False)
+            autonomous_db_resource = DatabaseResource({
+                'data': autonomous_db_data,
+                'region_code': autonomous_db_data.region,
+                'reference': ReferenceModel(autonomous_db_data.reference()),
+                'tags': adb_raw['_freeform_tags']
+            })
+            # self.set_region_code(autonomous_db_data.region)
+            autonomous_database_list.append(DatabaseResponse({'resource': autonomous_db_resource}))
+            # Must set_region_code method for region collection
+
+        if basic_adb_list:
+            print(f"SET REGION CODE... {params.get('region')} // {params.get('compartment').name}")
+            self.set_region_code(region)
+
+            # raw_data = self._set_mandatory_param(adb_conn, basic_adb_list,
+            #                                      params['region'], params['compartment'].name)
+
+            # autonomous_database_list.extend(self._set_resources(raw_data))
+        ''' 
         for region in regions:
             secret_data['region'] = region
             adb_conn.set_connect(secret_data)
@@ -43,8 +88,8 @@ class AutonomousDatabaseManager(OCIManager):
                     # Must set_region_code method for region collection
                     self.set_region_code(region)
                     autonomous_database_list.extend(self._set_resources(raw_data))
-
-        print(f'** Autonomous Database Finished {time.time() - start_time} Seconds **')
+        '''
+        # print(f'** Autonomous Database Finished {time.time() - start_time} Seconds **')
         return autonomous_database_list
 
     def _set_resources(self, raw_data):
@@ -57,7 +102,7 @@ class AutonomousDatabaseManager(OCIManager):
                 'reference': ReferenceModel(autonomous_db_data.reference()),
                 'tags': raw['_freeform_tags']
             })
-            self.set_region_code(autonomous_db_data.region)
+            # self.set_region_code(autonomous_db_data.region)
             result.append(DatabaseResponse({'resource': autonomous_db_resource}))
 
         return result
@@ -71,7 +116,8 @@ class AutonomousDatabaseManager(OCIManager):
                 'region': region,
                 'compartment_name': comp_name,
                 '_freeform_tags': self.convert_tags(adb_primitives['_freeform_tags']),
-                '_db_workload': self._set_workload_type(adb_primitives['_db_workload']),
+                'db_workload_display': self._set_workload_type(adb_primitives['_db_workload']),
+                'size': OCIManager.gigabyte_to_byte(adb_primitives['_data_storage_size_in_gbs']),# 바이트 단위로 정규화 후 넣어주기
                 '_data_storage_size_in_tbs': self.gbs_to_tbs(adb_primitives['_data_storage_size_in_gbs']),
                 '_license_model': self.define_license_type(adb_primitives['_license_model']),
                 '_permission_level': self.define_permission_level(adb_primitives['_permission_level']),
@@ -96,7 +142,7 @@ class AutonomousDatabaseManager(OCIManager):
     def _set_clone_list(self, clone_list):
         result = []
         for clone in clone_list:
-            clone_primitives = self.convert_nested_dictionary(self,clone)
+            clone_primitives = self.convert_nested_dictionary(self, clone)
             result.append(clone_primitives)
         return result
 
@@ -137,3 +183,5 @@ class AutonomousDatabaseManager(OCIManager):
             permission_level = 'Allow secure access from everywhere'
 
         return permission_level
+
+
