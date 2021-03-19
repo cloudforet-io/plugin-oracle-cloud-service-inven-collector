@@ -5,7 +5,7 @@ from spaceone.core.error import *
 from spaceone.core.connector import BaseConnector
 
 
-DEFAULT_SCHEMA = 'oci_client_secret'
+DEFAULT_SCHEMA = 'oci_api_key'
 
 
 class OCIConnector(BaseConnector):

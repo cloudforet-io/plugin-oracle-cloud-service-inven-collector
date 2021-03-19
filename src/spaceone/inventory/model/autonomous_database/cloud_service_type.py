@@ -5,7 +5,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
 
 cst_adb = CloudServiceTypeResource()
 cst_adb.name = 'Database'
-cst_adb.provider = 'oci'
+cst_adb.provider = 'oracle_cloud'
 cst_adb.group = 'AutonomousDatabase'
 cst_adb.labels = ['database']
 cst_adb.service_code = 'OracleAutonomousDatabase'

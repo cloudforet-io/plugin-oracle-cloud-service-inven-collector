@@ -6,7 +6,7 @@ from .base import BaseResponse
 class RegionResource(Model):
     name = StringType(default="")
     region_code = StringType()
-    provider = StringType(default="oci")
+    provider = StringType(default="oracle_cloud")
     tags = DictType(StringType)
 
 
