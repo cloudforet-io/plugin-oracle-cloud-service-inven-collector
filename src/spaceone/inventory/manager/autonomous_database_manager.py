@@ -15,7 +15,7 @@ class AutonomousDatabaseManager(OCIManager):
         self.cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        print(f"** Autonomous Database START ** // {params.get('region')} // {params.get('compartment').name}")
+        #print(f"** Autonomous Database START ** // {params.get('region')} // {params.get('compartment').name}")
         start_time = time.time()
         """
         Args:
@@ -69,7 +69,7 @@ class AutonomousDatabaseManager(OCIManager):
             # Must set_region_code method for region collection
 
         if basic_adb_list:
-            print(f"SET REGION CODE... {params.get('region')} // {params.get('compartment').name}")
+            print(f"SET REGION CODE FROM AUTONOMOUS DB... {params.get('region')} // {params.get('compartment').name}")
             self.set_region_code(region)
 
             # raw_data = self._set_mandatory_param(adb_conn, basic_adb_list,
