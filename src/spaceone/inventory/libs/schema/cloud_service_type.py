@@ -18,7 +18,7 @@ class CloudServiceTypeMeta(BaseMetaData):
 
 class CloudServiceTypeResource(Model):
     name = StringType()
-    provider = StringType(default='oci')
+    provider = StringType(default='oracle_cloud')
     group = StringType()
     _metadata = PolyModelType(CloudServiceTypeMeta, serialize_when_none=False, serialized_name='metadata')
     labels = ListType(StringType(), serialize_when_none=False)
