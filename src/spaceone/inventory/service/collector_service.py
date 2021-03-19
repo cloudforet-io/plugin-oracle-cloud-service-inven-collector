@@ -15,19 +15,11 @@ MAX_WORKER = 10
 SUPPORTED_FEATURES = ['garbage_collection']
 SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType', 'inventory.Region']
 FILTER_FORMAT = []
-DEFAULT_REGIONS = (
-    'ap-seoul-1',
-    'us-ashburn-1',
-    'ap-chuncheon-1',
-    'ap-tokyo-1',
-    'eu-frankfurt-1',
-    'sa-saopaulo-1',
-    'us-phoenix-1',
-    'ca-montreal-1',
-    'uk-london-1',
-    'me-dubai-1'
-)
-# 리전 정보 다 넣기........ㅜㅜㅜㅜㅜㅜㅜ어흐흑 따흐
+DEFAULT_REGIONS = ('ap-seoul-1', 'us-ashburn-1', 'ap-chuncheon-1', 'ap-tokyo-1', 'eu-frankfurt-1',
+                   'sa-saopaulo-1', 'us-phoenix-1', 'ca-montreal-1', 'uk-london-1', 'me-dubai-1',
+                   'ca-montreal-1', 'ca-toronto-1', 'sa-santiago-1', 'ap-hyderabad-1', 'ap-mumbai-1',
+                   'ap-osaka-1', 'ap-tokyo-1', 'eu-amsterdam-1', 'me-jeddah-1', 'eu-zurich-1',
+                   'uk-cardiff-1', 'us-sanjose-1')
 
 
 @authentication_handler
