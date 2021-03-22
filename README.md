@@ -55,6 +55,5 @@ More information about the IAM is available at the following [link](https://docs
         * Allow group {group_name} to inspect autonomous-database-family in tenancy
 
 
-    
-    
+   
 
