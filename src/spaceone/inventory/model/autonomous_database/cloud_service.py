@@ -13,6 +13,10 @@ Autonomous Database Information
 general_info_meta = ItemDynamicLayout.set_fields('General Information', fields=[
     TextDyField.data_source('Display Name', 'data.display_name'),
     TextDyField.data_source('Workload Type', 'data.db_workload_display'),
+    EnumDyField.data_source('Is dedicated', 'data.is_dedicated',
+                            default_badge={'indigo.500': ['true'],
+                                           'coral.600': ['false'],
+                                           }),
     TextDyField.data_source('Region', 'data.region'),
     TextDyField.data_source('Compartment', 'data.compartment_name'),
     TextDyField.data_source('OCID', 'data.id'),
@@ -52,13 +56,6 @@ general_info_meta = ItemDynamicLayout.set_fields('General Information', fields=[
     DateTimeDyField.data_source('Created', 'data.time_created')
 ])
 
-infrastructure_meta = ItemDynamicLayout.set_fields('Infrastructure', fields=[
-    EnumDyField.data_source('Dedicated Infrastructure', 'data.is_dedicated', default_badge={
-                                'indigo.500': ['true'],
-                                'coral.600': ['false'],
-                            })
-])
-
 network_meta = ItemDynamicLayout.set_fields('Network', fields=[
     TextDyField.data_source('Access Type', 'data.permission_level'),
     ListDyField.data_source('NSG ids', 'data.nsg_ids', options={'delimiter': '<br>'}),
@@ -74,8 +71,7 @@ maintenance_meta = ItemDynamicLayout.set_fields('Maintenance', fields=[
 ])
 
 database_meta = ListDynamicLayout.set_layouts('Autonomous Database Information',
-                                              [general_info_meta,infrastructure_meta,
-                                               network_meta, maintenance_meta])
+                                              [general_info_meta, network_meta, maintenance_meta])
 
 '''
 Connection
@@ -155,7 +151,8 @@ database_tags = TableDynamicLayout.set_fields('Tags', 'data.freeform_tags', fiel
 adb_meta = CloudServiceMeta.set_layouts([database_meta,
                                          connection_meta,
                                          database_tags,
-                                         backup_meta])
+                                         backup_meta,
+                                         refresh_clone_meta])
 
 
 class AutonomousDatabaseResource(CloudServiceResource):
