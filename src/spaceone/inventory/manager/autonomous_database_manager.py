@@ -15,7 +15,6 @@ class AutonomousDatabaseManager(OCIManager):
         self.cloud_service_types = CLOUD_SERVICE_TYPES
 
     def collect_cloud_service(self, params):
-        #print(f"** Autonomous Database START ** // {params.get('region')} // {params.get('compartment').name}")
         start_time = time.time()
         """
         Args:
