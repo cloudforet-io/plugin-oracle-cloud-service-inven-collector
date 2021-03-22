@@ -21,7 +21,7 @@ class Tags(Model):
 
 
 class CloudServiceResource(Model):
-    provider = StringType(default="oci")
+    provider = StringType(default="oracle_cloud")
     cloud_service_type = StringType()
     cloud_service_group = StringType()
     tags = ListType(ModelType(Tags), serialize_when_none=False)

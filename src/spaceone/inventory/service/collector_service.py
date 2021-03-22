@@ -129,8 +129,6 @@ class CollectorService(BaseService):
         start_time = time.time()
 
         print("[ EXECUTOR START: Oracle Cloud Service ]")
-        key = params['secret_data']
-        print(key)
         regions, compartments, secret_data = self.get_regions_and_compartment(params['secret_data'])
         multi_thread_params = self._set_multi_thread_params(secret_data, regions, compartments)
 
