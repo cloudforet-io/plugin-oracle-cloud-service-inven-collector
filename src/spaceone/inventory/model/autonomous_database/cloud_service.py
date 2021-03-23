@@ -150,9 +150,9 @@ database_tags = TableDynamicLayout.set_fields('Tags', 'data.freeform_tags', fiel
 
 adb_meta = CloudServiceMeta.set_layouts([database_meta,
                                          connection_meta,
-                                         database_tags,
                                          backup_meta,
-                                         refresh_clone_meta])
+                                         refresh_clone_meta,
+                                         database_tags])
 
 
 class AutonomousDatabaseResource(CloudServiceResource):

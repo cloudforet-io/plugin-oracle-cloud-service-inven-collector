@@ -85,6 +85,10 @@ class CollectorService(BaseService):
         compartments = []
         regions = []
         tenancy = None
+        key_content = secret_data["key_content"].replace("\\n", "\n")
+        secret_data.update({
+            "key_content" : key_content
+        })
         for default_region in DEFAULT_REGIONS:
             secret_data.update({'region': default_region})
             try:
