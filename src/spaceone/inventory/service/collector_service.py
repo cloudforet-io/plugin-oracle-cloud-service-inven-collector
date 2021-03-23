@@ -80,33 +80,23 @@ class CollectorService(BaseService):
         except Exception as e:
             raise RuntimeError("[ERROR: ResourceInfo] Error on identity_read_compartments: " + str(e.args))
 
+    @staticmethod
+    def private_key_content_pretreatment(secret_data):
+        begin = "-----BEGIN RSA PRIVATE KEY-----\n"
+        end = "\n-----END RSA PRIVATE KEY-----"
+        key_content = secret_data.get("key_content")
+
+        return begin + "\n".join(key_content.split(" ")) + end
+
     @classmethod
     def get_regions_and_compartment(cls,secret_data):
         compartments = []
         regions = []
         tenancy = None
-        #key_content = secret_data["key_content"].replace("\\n", "\n")
-        print("===BEFORE PRETREATMENT===")
-        print(f"{secret_data['key_content']}")
-        print("=========================")
 
-        begin = "-----BEGIN RSA PRIVATE KEY-----\n"
-        end = "\n-----END RSA PRIVATE KEY-----"
-        key_content = secret_data.get("key_content")
         secret_data.update({
-            "key_content": begin + "\n".join(key_content.split(" ")) + end
+            "key_content": cls.private_key_content_pretreatment(secret_data)
         })
-        '''
-        begin = "-----BEGIN RSA PRIVATE KEY-----\n"
-        end = "\n-----END RSA PRIVATE KEY-----"
-        config.update({
-        "key_content" : begin + "\n".join(config["key_content"].split(" ")) + end
-        })
-        '''
-
-        print("===AFTER PRETREATMENT===")
-        print(f"{secret_data['key_content']}")
-        print("=========================")
 
         for default_region in DEFAULT_REGIONS:
             secret_data.update({'region': default_region})
