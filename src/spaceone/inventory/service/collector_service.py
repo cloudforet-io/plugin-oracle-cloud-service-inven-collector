@@ -90,10 +90,19 @@ class CollectorService(BaseService):
         print(f"{secret_data['key_content']}")
         print("=========================")
 
+        begin = "-----BEGIN RSA PRIVATE KEY-----\n"
+        end = "\n-----END RSA PRIVATE KEY-----"
         key_content = secret_data.get("key_content")
         secret_data.update({
-            "key_content": key_content.replace("\\n", "\n")
+            "key_content": begin + "\n".join(key_content.split(" ")) + end
         })
+        '''
+        begin = "-----BEGIN RSA PRIVATE KEY-----\n"
+        end = "\n-----END RSA PRIVATE KEY-----"
+        config.update({
+        "key_content" : begin + "\n".join(config["key_content"].split(" ")) + end
+        })
+        '''
 
         print("===AFTER PRETREATMENT===")
         print(f"{secret_data['key_content']}")
