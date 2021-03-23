@@ -85,10 +85,20 @@ class CollectorService(BaseService):
         compartments = []
         regions = []
         tenancy = None
-        key_content = secret_data["key_content"].replace("\\n", "\n")
+        #key_content = secret_data["key_content"].replace("\\n", "\n")
+        print("===BEFORE PRETREATMENT===")
+        print(f"{secret_data['key_content']}")
+        print("=========================")
+
+        key_content = secret_data.get("key_content")
         secret_data.update({
-            "key_content" : key_content
+            "key_content": key_content.replace("\\n", "\n")
         })
+
+        print("===AFTER PRETREATMENT===")
+        print(f"{secret_data['key_content']}")
+        print("=========================")
+
         for default_region in DEFAULT_REGIONS:
             secret_data.update({'region': default_region})
             try:
