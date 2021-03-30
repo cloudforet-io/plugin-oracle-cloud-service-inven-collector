@@ -161,8 +161,12 @@ class CollectorService(BaseService):
                     future_executors.append(executor.submit(mt_manager.collect_resources, mt_params))
 
             for future in concurrent.futures.as_completed(future_executors):
-                for result in future.result():
-                    yield result.to_primitive()
+                try:
+                    for result in future.result():
+                        yield result.to_primitive()
+                except Exception as e:
+                    print(f"[ERROR INFO] Error in collecting resource: {e}")
+                    pass
 
         # for manager in self.execute_managers:
         #     _manager = self.locator.get_manager(manager)
