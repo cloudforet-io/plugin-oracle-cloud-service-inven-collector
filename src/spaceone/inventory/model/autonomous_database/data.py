@@ -163,3 +163,5 @@ class Database(Model):
             "resource_id": self.id,
             "external_link": f"https://cloud.oracle.com/db/adb/{self.id}?region={self.region}",
         }
+
+
