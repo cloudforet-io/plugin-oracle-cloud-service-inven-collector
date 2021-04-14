@@ -74,7 +74,8 @@ class CollectorService(BaseService):
             # Add root compartment which is not part of list_compartments
             for compartment in compartments:
                 if compartment.id == secret_data['tenancy'] or \
-                        compartment.lifecycle_state == Compartment.LIFECYCLE_STATE_ACTIVE:
+                        compartment.lifecycle_state == Compartment.LIFECYCLE_STATE_ACTIVE or \
+                        compartment.name != "ManagedCompartmentForPaaS":
                     result.append(compartment)
             result.append(tenancy)
             return result

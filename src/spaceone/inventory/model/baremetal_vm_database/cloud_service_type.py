@@ -3,7 +3,7 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 '''
-DDSystems
+DBSystems
 '''
 cst_bmvm_dbsystems = CloudServiceTypeResource()
 cst_bmvm_dbsystems.name = 'DBSystems'
@@ -141,7 +141,7 @@ cst_bmvm_images._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='State', key='data.lifecycle_state'),
         SearchField.set(name='Availability Domain', key='data.availability_domain'),
         SearchField.set(name='Stated', key='data.time_started', data_type='datetime'),
-        SearchField.set(name='Ended',key='data.time_ended', data_type='datetime')
+        SearchField.set(name='Ended', key='data.time_ended', data_type='datetime')
     ]
 )
 

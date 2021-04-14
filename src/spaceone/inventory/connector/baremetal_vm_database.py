@@ -17,9 +17,17 @@ class BareMetalVMDatabaseConnector(OCIConnector):
     def list_database_dbsystems(self, compartment):
         result = []
         try:
+            '''
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_db_systems,
                 compartment.id,
+                sort_by="TIMECREATED"
+            ).data
+            '''
+            result = oci.pagination.list_call_get_all_results(
+                self.database_client.list_db_systems,
+                compartment.id,
+                sort_by="DISPLAYNAME"
             ).data
         except oci.exceptions.ServiceError as e:
             print(f'[ERROR: OCI API Info]: {e}')
@@ -33,7 +41,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_databases,
                 compartment.id,
-                db_home_id = dbhome_id
+                db_home_id=dbhome_id
             ).data
         except oci.exceptions.ServiceError as e:
             print(f'[ERROR: OCI API Info]: {e}')
@@ -47,7 +55,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_database_software_images,
                 compartment.id,
-                image_shape_family = 'VM_BM_SHAPE'
+                image_shape_family='VM_BM_SHAPE'
             ).data
         except oci.exceptions.ServiceError as e:
             print(f'[ERROR: OCI API Info]: {e}')
@@ -55,12 +63,11 @@ class BareMetalVMDatabaseConnector(OCIConnector):
 
         return result
 
-    def list_database_backups(self, compartment, db_id):
+    def list_database_backups(self, compartment):
         result = []
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_backups,
-                database_id = db_id,
                 compartment_id=compartment.id
             ).data
         except oci.exceptions.ServiceError as e:
@@ -128,7 +135,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_data_guard_associations,
-                database_id
+                database_id=database_id
             ).data
         except oci.exceptions.ServiceError as e:
             print(f'[ERROR: OCI API Info]: {e}')

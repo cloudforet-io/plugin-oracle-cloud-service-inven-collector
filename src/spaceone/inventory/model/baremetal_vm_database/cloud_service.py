@@ -19,7 +19,6 @@ dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
     }),
     TextDyField.data_source('Availability Domain', 'data.availability_domain'),
     ListDyField.data_source('Fault Domains','data.fault_domains', options={
-        'sub_key': 'fault_domains',
         'delimiter': '<br>'
     }),
     TextDyField.data_source('Cluster Name', 'data.cluster_name'),
@@ -42,7 +41,6 @@ dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
     TextDyField.data_source('Maintenance Window', 'data.maintenance_window.display'),
     TextDyField.data_source('KMS key Id', 'data.kms_key_id'),
     ListDyField.data_source('SSH Public Key', 'data.ssh_public_keys', options={
-        'sub_key': 'ssh_public_keys',
         'delimiter': '<br>'
     })
 ])
@@ -51,11 +49,9 @@ dbsystem_network = ItemDynamicLayout.set_fields('Network', fields= [
     TextDyField.data_source('Subnet Id', 'data.subnet_id'),
     TextDyField.data_source('Backup Subnet Id', 'data.backup_subnet_id'),
     ListDyField.data_source('NSG Id', 'data.nsg_id', options={
-        'sub_key': 'nsg_id',
         'delimiter': '<br>'
     }),
-    TextDyField.data_source('Backup Network NSG Id', 'data.backup_network_nsg_ids', options={
-        'sub_key': 'backup_network_nsg_ids',
+    ListDyField.data_source('Backup Network NSG Id', 'data.backup_network_nsg_ids', options={
         'delimiter': '<br>'
     }),
     TextDyField.data_source('Hostname', 'data.hostname'),
@@ -63,7 +59,6 @@ dbsystem_network = ItemDynamicLayout.set_fields('Network', fields= [
     TextDyField.data_source('Port', 'data.listener_port'),
     TextDyField.data_source('Scan DNS Name', 'data.scan_dns_name'),
     ListDyField.data_source('Vip Ids', 'data.vip_ids', options={
-        'sub_key': 'vip_ids',
         'delimiter': '<br>'
     })
 ])

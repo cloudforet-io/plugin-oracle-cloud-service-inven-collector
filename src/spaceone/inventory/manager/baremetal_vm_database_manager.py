@@ -4,6 +4,7 @@ from spaceone.inventory.model.baremetal_vm_database import *
 from spaceone.inventory.model.baremetal_vm_database.cloud_service import *
 from spaceone.inventory.connector.baremetal_vm_database import BareMetalVMDatabaseConnector
 from spaceone.inventory.model.baremetal_vm_database.cloud_service_type import CLOUD_SERVICE_TYPES
+from oci.database.models import DbSystemSummary
 import time
 
 
@@ -40,18 +41,21 @@ class BareMetalVMDatabaseManager(OCIManager):
         basic_bmvm_dbsystem_list = bmvm_conn.list_database_dbsystems(params['compartment'])
         bmvm_images_list = bmvm_conn.list_database_images(params['compartment'])
         bmvm_backup_list = bmvm_conn.list_database_backups(params['compartment'])
-        bmvm_servers = []
-
+        bmvm_database = []
         for db_system in basic_bmvm_dbsystem_list:
+            '''
+            if db_system.lifecycle_state == DbSystemSummary.LIFECYCLE_STATE_TERMINATED:
+                continue
+            '''
             db_system_raw = self.convert_nested_dictionary(self, db_system)
             db_homes = bmvm_conn.list_database_home(compartment, db_system_raw['_id'])
-            db_nodes, node_conn =  self._collect_db_nodes(bmvm_conn, compartment, db_system_raw.get('_id'))
+            db_nodes, node_conn = self._collect_db_nodes(bmvm_conn, compartment, db_system_raw.get('_id'))
             db_system_raw.update({
                 'region': region,
                 'compartment_name': compartment.name,
                 '_db_system_options': self.convert_nested_dictionary(self, db_system_raw['_db_system_options']),
                 '_maintenance_window': bmvm_conn.load_database_maintenance_windows(db_system_raw['_maintenance_window']),
-                'freeform_tags':  self.convert_tags(db_system_raw['_freeform_tags']),
+                '_freeform_tags':  self.convert_tags(db_system_raw['_freeform_tags']),
                 'last_maintenance_run': bmvm_conn.load_maintenance_run(db_system_raw['_last_maintenance_run_id'],
                                                                        db_system_raw['_display_name']+' - ' +
                                                                        db_system_raw['_shape']),
@@ -65,28 +69,38 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'list_patch_history': self._collect_db_system_patch_history(bmvm_conn, db_system_raw.get('_id')),
                 'list_patches': self._collect_db_system_patch(bmvm_conn, db_system_raw.get('_id')),
                 'list_backups': self._convert_object_to_list(bmvm_backup_list),
-                'list_software_images' : self._update_software_images(bmvm_images_list)
+                'list_software_images': self._update_software_images(bmvm_images_list)
             })
 
-            # 화면에 출력하도록 바인딩 하는 작업 수행!!!!, 각 리스트 뽑아서 리스폰스로 보내버리기~~~~~
+            db_system_data = DbSystem(db_system_raw, strict=False)
+            db_system_resource = DBSystemsResource({
+                'data': db_system_raw,
+                'region_code': region,
+                'reference': ReferenceModel(db_system_data.reference()),
+                'tags': db_system_raw.get('_freeform_tags', [])
+            })
+            bmvm_database.append(DBSystemResponse({'resource': db_system_resource}))
+            bmvm_database.extend(self.set_database_resources(db_system_raw.get('list_database', []), region))
+            bmvm_database.extend(self.set_image_resources(db_system_raw.get('list_software_images', []), region))
+            bmvm_database.extend(self.set_backup_resources(db_system_raw.get('list_backups', []), region))
 
+            if bmvm_database:
+                print(f"SET REGION CODE FROM BareMetal,VM DB... {params.get('region')} // {params.get('compartment').name}")
+                self.set_region_code(region)
 
+        return bmvm_database
 
-        return basic_bmvm_dbsystem_list
-
-    def _set_resources(self, raw_data):
+    @staticmethod
+    def _set_database_resources(databases, region):
         result = []
-        for raw in raw_data:
-            autonomous_db_data = Database(raw, strict=False)
-            autonomous_db_resource = DatabaseResource({
-                'data': autonomous_db_data,
-                'region_code': autonomous_db_data.region,
-                'reference': ReferenceModel(autonomous_db_data.reference()),
-                'tags': raw['_freeform_tags']
+        for database in databases:
+            database_data = Database(database, strict= False)
+            database_resource = DatabaseResource({
+                'data': database_data,
+                'region_code': region,
+                'tags': database.get('_freeform_tags', [])
             })
-            # self.set_region_code(autonomous_db_data.region)
-            result.append(DatabaseResponse({'resource': autonomous_db_resource}))
-
+            result.append(DatabaseResponse({'resource': database_resource}))
         return result
 
     def _convert_database_homes(self, db_homes):
@@ -100,7 +114,6 @@ class BareMetalVMDatabaseManager(OCIManager):
         for ob in lists:
             result.append(self.convert_nested_dictionary(self, ob))
         return result
-
 
     def _collect_matched_database(self, bmvm_conn, compartment, db_homes):
         result = []
@@ -171,6 +184,45 @@ class BareMetalVMDatabaseManager(OCIManager):
                 '_freeform_tags': self.convert_tags(image.get('_freeform_tags'))
             })
             result.append(image)
+        return result
+
+    @staticmethod
+    def set_database_resources(databases, region):
+        result = []
+        for database in databases:
+            database_data = Database(database, strict=False)
+            database_resource = DatabaseResource({
+                'data': database_data,
+                'region_code': region,
+                'tags': database.get('_freeform_tags', [])
+            })
+            result.append(DatabaseResponse({'resource': database_resource}))
+        return result
+
+    @staticmethod
+    def set_image_resources(images, region):
+        result = []
+        for image in images:
+            image_data = DatabaseSoftwareImage(image, strict=False)
+            image_resource = DatabaseResource({
+                'data': image_data,
+                'region_code': region,
+                'tags': image.get('_freeform_tags', [])
+            })
+            result.append(DatabaseResponse({'resource': image_resource}))
+        return result
+
+    @staticmethod
+    def set_backup_resources(backups, region):
+        result = []
+        for backup in backups:
+            backup_data = Backup(backup, strict=False)
+            backup_resource =  BackupResource({
+                'data': backup_data,
+                'region_code': region,
+                'tags': backup.get('_freeform_tags', [])
+            })
+            result.append(BackupResponse({'resource': backup_resource}))
         return result
 
     @staticmethod

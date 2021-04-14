@@ -93,7 +93,7 @@ class DBHome(Model):
 
 
 class ConnectionStrings(Model):
-    all_connection_strings = ListType(Tags, deserialize_from='_all_connection_strings', default=[])
+    all_connection_strings = ListType(ModelType(Tags), deserialize_from='_all_connection_strings', default=[])
     cdb_default = StringType(deserialize_from='_cdb_default')
     cdb_ip_default = StringType(deserialize_from='_cdb_ip_default')
 
@@ -166,9 +166,9 @@ class Database(Model):
     source_database_point_in_time_recovery_timestamp = \
         DateTimeType(deserialize_from='source_database_point_in_time_recovery_timestamp')
     database_software_image_id = StringType(deserialize_from='_database_software_image_id')
-    list_upgrade_history = ListType(UpgradeHistory, deserialize_from='list_upgrade_history',
+    list_upgrade_history = ListType(ModelType(UpgradeHistory), deserialize_from='list_upgrade_history',
                                     default=[])
-    list_dataguard_association = ListType(DataGuardAssociation, deserialize_from='list_dataguard_association',
+    list_dataguard_association = ListType(ModelType(DataGuardAssociation), deserialize_from='list_dataguard_association',
                                           default=[])
 
 
@@ -200,7 +200,7 @@ class DbNode(Model):
     time_maintenance_window_start = DateTimeType(deserialize_from='_time_maintenance_window_start')
     time_maintenance_window_end = DateTimeType(deserialize_from='_time_maintenance_window_end')
     additional_details = StringType(deserialize_from='_additional_details')
-    console_connections = ListType(ConsoleConnections, deserialize_from='console_connections', default=[])
+    console_connections = ListType(ModelType(ConsoleConnections), deserialize_from='console_connections', default=[])
 
 
 class Backup(Model):
