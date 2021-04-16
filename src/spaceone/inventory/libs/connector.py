@@ -40,7 +40,7 @@ class OCIConnector(BaseConnector):
         try:
             oci.config.validate_config(secret_data)
         except Exception as e:
-            print(f'[ERROR: ResourceInfo]: {e}')
+            print(f'[ERROR IN CLIENT VERIFY: ResourceInfo]: {e}')
 
         self.set_connect(secret_data)
         return "ACTIVE"

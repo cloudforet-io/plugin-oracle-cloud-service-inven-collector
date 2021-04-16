@@ -1,7 +1,7 @@
 from spaceone.core.manager import BaseManager
 from spaceone.inventory.libs.connector import OCIConnector
 from spaceone.inventory.libs.schema.region import RegionResource, RegionResponse
-
+from spaceone.core.transaction import Transaction
 REGION_INFO = {
     'ap-sydney-1': {'name': 'Australia East (Sydney)',
                     'tags': {'latitude': '-33.795606497812734', 'longitude': '151.14310024060555'}},
@@ -52,8 +52,8 @@ REGION_INFO = {
 
 class OCIManager(BaseManager):
 
-    def __init__(self, transaction, **kwargs):
-        super().__init__(transaction, **kwargs)
+    def __init__(self, transaction: Transaction = None, config: dict = None, **kwargs):
+        super().__init__(transaction=transaction, **kwargs)
 
         self.connector_name = None
         self.cloud_service_types = []
@@ -69,7 +69,7 @@ class OCIManager(BaseManager):
             connector.verify(secret_data)
 
         except Exception as e:
-            print(f'[ERROR: ResourceInfo]: {e}')
+            print(f'[ERROR IN VERIFY: ResourceInfo]: {e}')
 
     def collect_cloud_service_type(self):
         for cloud_service_type in self.cloud_service_types:

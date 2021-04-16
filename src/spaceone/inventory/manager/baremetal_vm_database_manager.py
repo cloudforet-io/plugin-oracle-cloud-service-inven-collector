@@ -6,6 +6,7 @@ from spaceone.inventory.connector.baremetal_vm_database import BareMetalVMDataba
 from spaceone.inventory.model.baremetal_vm_database.cloud_service_type import CLOUD_SERVICE_TYPES
 from oci.database.models import DbSystemSummary
 import time
+from pprint import pprint
 
 
 class BareMetalVMDatabaseManager(OCIManager):
@@ -38,9 +39,9 @@ class BareMetalVMDatabaseManager(OCIManager):
         bmvm_conn.set_connect(secret_data)
 
         # Get list of BareMetal,VM Database Resources
-        basic_bmvm_dbsystem_list = bmvm_conn.list_database_dbsystems(params['compartment'])
-        bmvm_images_list = bmvm_conn.list_database_images(params['compartment'])
-        bmvm_backup_list = bmvm_conn.list_database_backups(params['compartment'])
+        basic_bmvm_dbsystem_list = bmvm_conn.list_database_dbsystems(compartment)
+        bmvm_images_list = bmvm_conn.list_database_images(compartment)
+        bmvm_backup_list = bmvm_conn.list_database_backups(compartment)
         bmvm_database = []
         for db_system in basic_bmvm_dbsystem_list:
             '''
@@ -48,12 +49,12 @@ class BareMetalVMDatabaseManager(OCIManager):
                 continue
             '''
             db_system_raw = self.convert_nested_dictionary(self, db_system)
+            #pprint(db_system_raw)
             db_homes = bmvm_conn.list_database_home(compartment, db_system_raw['_id'])
             db_nodes, node_conn = self._collect_db_nodes(bmvm_conn, compartment, db_system_raw.get('_id'))
             db_system_raw.update({
                 'region': region,
                 'compartment_name': compartment.name,
-                '_db_system_options': self.convert_nested_dictionary(self, db_system_raw['_db_system_options']),
                 '_maintenance_window': bmvm_conn.load_database_maintenance_windows(db_system_raw['_maintenance_window']),
                 '_freeform_tags':  self.convert_tags(db_system_raw['_freeform_tags']),
                 'last_maintenance_run': bmvm_conn.load_maintenance_run(db_system_raw['_last_maintenance_run_id'],
@@ -66,7 +67,7 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'list_database': self._collect_matched_database(bmvm_conn, compartment, db_homes),
                 'list_db_node': db_nodes,
                 'console_connections': node_conn,
-                'list_patch_history': self._collect_db_system_patch_history(bmvm_conn, db_system_raw.get('_id')),
+                'list_patch_history': self._collect_db_system_patch_history(bmvm_conn, db_system_raw.get('list_db_Home')),
                 'list_patches': self._collect_db_system_patch(bmvm_conn, db_system_raw.get('_id')),
                 'list_backups': self._convert_object_to_list(bmvm_backup_list),
                 'list_software_images': self._update_software_images(bmvm_images_list)
@@ -74,14 +75,14 @@ class BareMetalVMDatabaseManager(OCIManager):
 
             db_system_data = DbSystem(db_system_raw, strict=False)
             db_system_resource = DBSystemsResource({
-                'data': db_system_raw,
+                'data': db_system_data,
                 'region_code': region,
                 'reference': ReferenceModel(db_system_data.reference()),
                 'tags': db_system_raw.get('_freeform_tags', [])
             })
-            bmvm_database.append(DBSystemResponse({'resource': db_system_resource}))
             bmvm_database.extend(self.set_database_resources(db_system_raw.get('list_database', []), region))
-            bmvm_database.extend(self.set_image_resources(db_system_raw.get('list_software_images', []), region))
+            bmvm_database.append(DBSystemResponse({'resource': db_system_resource}))
+            #bmvm_database.extend(self.set_image_resources(db_system_raw.get('list_software_images', []), region))
             bmvm_database.extend(self.set_backup_resources(db_system_raw.get('list_backups', []), region))
 
             if bmvm_database:
@@ -121,10 +122,12 @@ class BareMetalVMDatabaseManager(OCIManager):
             raws = bmvm_conn.list_bmvm_databases(compartment, db_home.id)
             for raw in raws:
                 raw = self.convert_nested_dictionary(self, raw)
-                conn_strings = self.convert_nested_dictionary(self,raw.get('_connection_strings'))
-                conn_strings.update({
-                    '_all_connection_strings': self.convert_tags(conn_strings.get('_all_connection_strings'))
-                })
+                conn_strings = raw.get('_connection_strings')
+
+                if conn_strings:
+                    conn_strings.update({
+                        '_all_connection_strings': self.convert_tags(conn_strings.get('_all_connection_strings'))
+                    })
 
                 raw.update({
                     '_connection_strings': conn_strings,
@@ -143,18 +146,28 @@ class BareMetalVMDatabaseManager(OCIManager):
         raws = bmvm_conn.list_database_nodes(compartment, system_id)
 
         for raw in raws:
+            node_connect_list = []
             raw = self.convert_nested_dictionary(self, raw)
-            node_connect = self.convert_nested_dictionary(self,bmvm_conn.list_console_connection(raw.get('_id')))
-            raw.update({
-                'console_connections': node_connect
-            })
+            for connect in bmvm_conn.list_console_connection(raw.get('_id')):
+                node_connect = self.convert_nested_dictionary(self, connect)
+                node_connect_list.append(node_connect)
+                node_console.append(node_connect)
+                raw.update({
+                    'console_connections': node_connect_list
+                })
+
             result.append(raw)
-            node_console.append(node_connect)
         return result, node_console
 
-    def _collect_db_system_patch_history(self,bmvm_conn, system_id):
+    def _collect_db_system_patch_history(self,bmvm_conn, list_db_home):
         result = []
-        raws = bmvm_conn.list_db_system_patch_history(system_id)
+        raws = []
+        if list_db_home is None:
+            return result
+        for db_home in list_db_home:
+            history = bmvm_conn.list_db_system_patch_history(db_home.get('_id'))
+            raws.extend(history)
+
         for raw in raws:
             raw = self.convert_dictionary(raw)
             result.append(raw)
@@ -209,7 +222,7 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'region_code': region,
                 'tags': image.get('_freeform_tags', [])
             })
-            result.append(DatabaseResponse({'resource': image_resource}))
+            result.append(DatabaseSoftwareImagesResponse({'resource': image_resource}))
         return result
 
     @staticmethod

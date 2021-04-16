@@ -306,7 +306,7 @@ class DatabaseSoftwareImagesResource(BaremetalVMResource):
     _metadata = ModelType(CloudServiceMeta, default=db_image_metadata, serialized_name='metadata')
 
 
-class DatabaseResponse(CloudServiceResponse):
+class DatabaseSoftwareImagesResponse(CloudServiceResponse):
     resource = PolyModelType(DatabaseSoftwareImagesResource)
 
 

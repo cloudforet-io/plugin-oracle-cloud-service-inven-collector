@@ -30,7 +30,7 @@ class CollectorService(BaseService):
         self.execute_managers = [
             # set Oracle cloud service manager
             'AutonomousDatabaseManager',
-            #'BareMetalVMDatabaseManager'
+            'BareMetalVMDatabaseManager'
         ]
 
     @check_required(['options'])
@@ -55,8 +55,14 @@ class CollectorService(BaseService):
         """
         options = params['options']
         secret_data = params.get('secret_data', {})
+        oci_manager = None
         if secret_data != {}:
-            oci_manager = OCIManager()
+            try:
+                oci_manager = OCIManager()
+            except Exception as e:
+                print(e)
+                raise e
+
             active = oci_manager.verify({}, secret_data)
 
         return {}
@@ -74,8 +80,7 @@ class CollectorService(BaseService):
             # Add root compartment which is not part of list_compartments
             for compartment in compartments:
                 if compartment.id == secret_data['tenancy'] or \
-                        compartment.lifecycle_state == Compartment.LIFECYCLE_STATE_ACTIVE or \
-                        compartment.name != "ManagedCompartmentForPaaS":
+                        compartment.lifecycle_state == Compartment.LIFECYCLE_STATE_ACTIVE:
                     result.append(compartment)
             result.append(tenancy)
             return result
@@ -144,6 +149,8 @@ class CollectorService(BaseService):
         start_time = time.time()
 
         print("[ EXECUTOR START: Oracle Cloud Service ]")
+        key = params['secret_data']
+        #print(key)
         regions, compartments, secret_data = self.get_regions_and_compartment(params['secret_data'])
         multi_thread_params = self._set_multi_thread_params(secret_data, regions, compartments)
 
@@ -163,12 +170,8 @@ class CollectorService(BaseService):
                     future_executors.append(executor.submit(mt_manager.collect_resources, mt_params))
 
             for future in concurrent.futures.as_completed(future_executors):
-                try:
-                    for result in future.result():
-                        yield result.to_primitive()
-                except Exception as e:
-                    print(f"[ERROR INFO] Error in collecting resource: {e}")
-                    pass
+                for result in future.result():
+                    yield result.to_primitive()
 
         # for manager in self.execute_managers:
         #     _manager = self.locator.get_manager(manager)
