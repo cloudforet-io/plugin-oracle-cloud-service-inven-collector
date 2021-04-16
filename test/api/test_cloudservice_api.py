@@ -41,16 +41,16 @@ class TestCollector(TestCase):
         pprint(cls.oci_credentials)
         super().setUpClass()
 
-    # def test_init(self):
-    #     v_info = self.inventory.Collector.init({'options': {}})
-    #     print_json(v_info)
-
+    def test_init(self):
+        v_info = self.inventory.Collector.init({'options': {}})
+        print_json(v_info)
+    '''
     def test_verify(self):
         options = {
         }
-        v_info = self.inventory.Collector.verify({'options': options, 'secret_data': self.oci_credentials})
+        v_info = self.inventory.Collector.verify({'options': options, 'secret_data': _get_credentials()})
         print_json(v_info)
-
+    '''
     def test_collect(self):
          options = {}
          filter = {}

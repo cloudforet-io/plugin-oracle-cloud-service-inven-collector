@@ -2,6 +2,7 @@ import logging
 import oci
 from spaceone.inventory.libs.connector import OCIConnector
 import datetime
+from pprint import pprint
 from spaceone.inventory.error import *
 
 __all__ = ['BareMetalVMDatabaseConnector']
@@ -17,6 +18,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
     def list_database_dbsystems(self, compartment):
         result = []
         try:
+
             '''
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_db_systems,
@@ -30,13 +32,15 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 sort_by="DISPLAYNAME"
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
-            pass
+            print(f'[ERROR: OCI DBSYSTEM API Info]: {e}')
+            raise e
 
         return result
 
     def list_bmvm_databases(self, compartment, dbhome_id):
         result = []
+        if dbhome_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_databases,
@@ -44,12 +48,15 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 db_home_id=dbhome_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI DATABASE API Info]: {e}')
             pass
 
         return result
 
     def list_database_images(self, compartment):
+        if compartment.name == 'ManagedCompartmentForPaaS':
+            return []
+
         result = []
         try:
             result = oci.pagination.list_call_get_all_results(
@@ -58,7 +65,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 image_shape_family='VM_BM_SHAPE'
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI DB IMAGE API Info {compartment.name}]: {e}')
             pass
 
         return result
@@ -71,13 +78,15 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 compartment_id=compartment.id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI BACKUP API Info]: {e}')
             pass
 
         return result
 
     def list_database_nodes(self,compartment, dbsystem_id):
         result = []
+        if dbsystem_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_db_nodes,
@@ -85,13 +94,15 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 db_system_id= dbsystem_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI DB NODE API Info]: {e}')
             pass
 
         return result
 
     def list_database_home(self, compartment, dbsystem_id):
         result = []
+        if dbsystem_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_db_homes,
@@ -99,72 +110,82 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 db_system_id=dbsystem_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI DB HOME API Info]: {e}')
             pass
 
         return result
 
     def list_db_system_patch_history(self, dbsystem_id):
         result = []
+        if dbsystem_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
-                self.database_client.list_db_homes,
+                self.database_client.list_db_home_patch_history_entries,
                 dbsystem_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI PATCH HISTORY API Info]: {e}')
             pass
 
         return result
 
     def list_db_system_patch(self, dbsystem_id):
         result = []
+        if dbsystem_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_db_system_patches,
-                dbsystem_id
+                db_system_id=dbsystem_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI DB PATCH API Info]: {e}')
             pass
 
         return result
 
     def list_dataguard_associations(self, database_id):
         result = []
+        if database_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_data_guard_associations,
                 database_id=database_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI DATAGUARD API Info]: {e}')
             pass
 
         return result
 
     def list_console_connection(self, node_id):
         result = []
+        if node_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_console_connections,
                 node_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI CONSOLE API Info]: {e}')
             pass
 
         return result
 
     def list_db_upgrade_history(self, db_id):
         result = []
+        if db_id is None:
+            return result
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_database_upgrade_history_entries,
                 db_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI API Info]: {e}')
+            print(f'[ERROR: OCI UPGRADE API Info]: {e}')
             pass
 
         return result
