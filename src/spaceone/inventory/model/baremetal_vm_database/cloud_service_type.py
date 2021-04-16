@@ -8,7 +8,7 @@ DBSystems
 cst_bmvm_dbsystems = CloudServiceTypeResource()
 cst_bmvm_dbsystems.name = 'DBSystems'
 cst_bmvm_dbsystems.provider = 'oracle_cloud'
-cst_bmvm_dbsystems.group = 'BareMetal,VMDatabase'
+cst_bmvm_dbsystems.group = 'BareMetalVMDatabase'
 cst_bmvm_dbsystems.labels = ['Database']
 cst_bmvm_dbsystems.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_dbsystems.is_primary = True
@@ -48,7 +48,7 @@ Database
 cst_bmvm_db = CloudServiceTypeResource()
 cst_bmvm_db.name = 'Database'
 cst_bmvm_db.provider  = 'oracle_cloud'
-cst_bmvm_db.group = 'Baremetal,VMDatabase'
+cst_bmvm_db.group = 'BaremetalVMDatabase'
 cst_bmvm_db.labels = ['Database']
 cst_bmvm_db.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_db.tags = {
@@ -83,7 +83,7 @@ DatabaseSoftwareImages
 cst_bmvm_images = CloudServiceTypeResource()
 cst_bmvm_images.name = 'DatabaseSoftwareImages'
 cst_bmvm_images.provider = 'oracle_cloud'
-cst_bmvm_images.group = 'Baremetal,VMDatabase'
+cst_bmvm_images.group = 'BaremetalVMDatabase'
 cst_bmvm_images.labels = ['Database']
 cst_bmvm_images.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_images.tags = {
@@ -117,7 +117,7 @@ Backup
 cst_bmvm_backup = CloudServiceTypeResource()
 cst_bmvm_backup.name = 'Backup'
 cst_bmvm_backup.provider = 'oracle_cloud'
-cst_bmvm_backup.group = 'Baremetal,VMDatabase'
+cst_bmvm_backup.group = 'BaremetalVMDatabase'
 cst_bmvm_backup.labels = ['Database']
 cst_bmvm_backup.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_backup.tags = {

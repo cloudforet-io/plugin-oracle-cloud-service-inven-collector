@@ -274,7 +274,7 @@ db_backup_metadata = CloudServiceMeta.set_layouts([db_backup_base, db_backup_tag
 
 
 class BaremetalVMResource(CloudServiceResource):
-    cloud_service_group = StringType(default='BareMetal,VMDatabase')
+    cloud_service_group = StringType(default='BareMetalVMDatabase')
 
 
 # DbSystems
