@@ -28,6 +28,10 @@ cst_bmvm_dbsystems._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Availability Domain', 'data.availability_domain'),
         TextDyField.data_source('Shape', 'data.shape'),
         TextDyField.data_source('CPU Core Count', 'data.cpu_core_count'),
+        SizeField.data_source('Storage Size', 'data.data_storage_size_in_gbs', options={
+            'display_unit': 'GB',
+            'source_unit': 'GB'
+        }),
         EnumDyField.data_source('Edition', 'data.database_edition',
                                 default_outline_badge=['STANDARD_EDITION', 'ENTERPRISE_EDITION',
                                                        'ENTERPRISE_EDITION_HIGH_PERFORMANCE',
@@ -41,6 +45,7 @@ cst_bmvm_dbsystems._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Shape', key='data.shape'),
         SearchField.set(name='CPU Core Count', key='data.cpu_core_count'),
         SearchField.set(name='Edition', key='data.database_edition'),
+        SearchField.set(name='Storage Size', key='data.data_storage_size_in_gbs'),
         SearchField.set(name='Created', key='data.time_created', data_type='datetime'),
     ]
 )
@@ -50,7 +55,7 @@ Database
 '''
 cst_bmvm_db = CloudServiceTypeResource()
 cst_bmvm_db.name = 'Database'
-cst_bmvm_db.provider  = 'oracle_cloud'
+cst_bmvm_db.provider = 'oracle_cloud'
 cst_bmvm_db.group = 'BareMetalVMDatabase'
 cst_bmvm_db.labels = ['Database']
 cst_bmvm_db.service_code = 'OracleEnterpriseDatabaseService'
