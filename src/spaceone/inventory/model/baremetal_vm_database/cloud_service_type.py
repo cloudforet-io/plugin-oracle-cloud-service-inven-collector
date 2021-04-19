@@ -8,7 +8,7 @@ DBSystems
 cst_bmvm_dbsystems = CloudServiceTypeResource()
 cst_bmvm_dbsystems.name = 'DBSystems'
 cst_bmvm_dbsystems.provider = 'oracle_cloud'
-cst_bmvm_dbsystems.group = 'BareMetal,VMDatabase'
+cst_bmvm_dbsystems.group = 'BareMetalVMDatabase'
 cst_bmvm_dbsystems.labels = ['Database']
 cst_bmvm_dbsystems.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_dbsystems.is_primary = True
@@ -21,14 +21,17 @@ cst_bmvm_dbsystems._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Display Name', 'data.display_name'),
         EnumDyField.data_source('State', 'data.lifecycle_state', default_state={
-            'safe': ['ACTIVE'],
+            'safe': ['AVAILABLE'],
             'warning': ['UPDATING', 'TERMINATING', 'MAINTENANCE_IN_PROGRESS'],
             'alert': ['TERMINATED', 'FAILED', 'MIGRATED', 'NEEDS_ATTENTION']
         }),
         TextDyField.data_source('Availability Domain', 'data.availability_domain'),
         TextDyField.data_source('Shape', 'data.shape'),
         TextDyField.data_source('CPU Core Count', 'data.cpu_core_count'),
-        TextDyField.data_source('Version', 'data.version'),
+        EnumDyField.data_source('Edition', 'data.database_edition',
+                                default_outline_badge=['STANDARD_EDITION', 'ENTERPRISE_EDITION',
+                                                       'ENTERPRISE_EDITION_HIGH_PERFORMANCE',
+                                                       'ENTERPRISE_EDITION_EXTREME_PERFORMANCE']),
         DateTimeDyField.data_source('Created', 'data.time_created'),
     ],
     search=[
@@ -37,7 +40,7 @@ cst_bmvm_dbsystems._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Availability Domain', key='data.availability_domain'),
         SearchField.set(name='Shape', key='data.shape'),
         SearchField.set(name='CPU Core Count', key='data.cpu_core_count'),
-        SearchField.set(name='Version', key='data.version'),
+        SearchField.set(name='Edition', key='data.database_edition'),
         SearchField.set(name='Created', key='data.time_created', data_type='datetime'),
     ]
 )
@@ -48,7 +51,7 @@ Database
 cst_bmvm_db = CloudServiceTypeResource()
 cst_bmvm_db.name = 'Database'
 cst_bmvm_db.provider  = 'oracle_cloud'
-cst_bmvm_db.group = 'Baremetal,VMDatabase'
+cst_bmvm_db.group = 'BareMetalVMDatabase'
 cst_bmvm_db.labels = ['Database']
 cst_bmvm_db.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_db.tags = {
@@ -83,7 +86,7 @@ DatabaseSoftwareImages
 cst_bmvm_images = CloudServiceTypeResource()
 cst_bmvm_images.name = 'DatabaseSoftwareImages'
 cst_bmvm_images.provider = 'oracle_cloud'
-cst_bmvm_images.group = 'Baremetal,VMDatabase'
+cst_bmvm_images.group = 'BareMetalVMDatabase'
 cst_bmvm_images.labels = ['Database']
 cst_bmvm_images.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_images.tags = {
@@ -117,7 +120,7 @@ Backup
 cst_bmvm_backup = CloudServiceTypeResource()
 cst_bmvm_backup.name = 'Backup'
 cst_bmvm_backup.provider = 'oracle_cloud'
-cst_bmvm_backup.group = 'Baremetal,VMDatabase'
+cst_bmvm_backup.group = 'BareMetalVMDatabase'
 cst_bmvm_backup.labels = ['Database']
 cst_bmvm_backup.service_code = 'OracleEnterpriseDatabaseService'
 cst_bmvm_backup.tags = {

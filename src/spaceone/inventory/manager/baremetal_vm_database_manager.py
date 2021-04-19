@@ -68,7 +68,7 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'list_db_node': db_nodes,
                 'console_connections': node_conn,
                 'list_patch_history': self._collect_db_system_patch_history(bmvm_conn, db_system_raw.get('list_db_Home')),
-                'list_patches': self._collect_db_system_patch(bmvm_conn, db_system_raw.get('_id')),
+                'list_patches': self._collect_db_system_patch(bmvm_conn, db_system_raw.get('_id'), compartment),
                 'list_backups': self._convert_object_to_list(bmvm_backup_list),
                 'list_software_images': self._update_software_images(bmvm_images_list)
             })
@@ -173,9 +173,9 @@ class BareMetalVMDatabaseManager(OCIManager):
             result.append(raw)
         return result
 
-    def _collect_db_system_patch(self, bmvm_conn, system_id):
+    def _collect_db_system_patch(self, bmvm_conn, system_id, compartment):
         result = []
-        raws = bmvm_conn.list_db_system_patch(system_id)
+        raws = bmvm_conn.list_db_system_patch(system_id, compartment)
 
         for raw in raws:
             raw = self.convert_nested_dictionary(self, raw)
