@@ -18,7 +18,7 @@ dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
         'alert': ['TERMINATED', 'FAILED', 'MIGRATED', 'NEEDS_ATTENTION']
     }),
     TextDyField.data_source('Availability Domain', 'data.availability_domain'),
-    ListDyField.data_source('Fault Domains','data.fault_domains', options={
+    ListDyField.data_source('Fault Domains', 'data.fault_domains', options={
         'delimiter': '<br>'
     }),
     TextDyField.data_source('Cluster Name', 'data.cluster_name'),
@@ -274,7 +274,7 @@ db_backup_metadata = CloudServiceMeta.set_layouts([db_backup_base, db_backup_tag
 
 
 class BaremetalVMResource(CloudServiceResource):
-    cloud_service_group = StringType(default='BareMetal,VMDatabase')
+    cloud_service_group = StringType(default='BareMetalVMDatabase')
 
 
 # DbSystems

@@ -130,7 +130,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
 
         return result
 
-    def list_db_system_patch(self, dbsystem_id):
+    def list_db_system_patch(self, dbsystem_id, compartment):
         result = []
         if dbsystem_id is None:
             return result
@@ -140,7 +140,7 @@ class BareMetalVMDatabaseConnector(OCIConnector):
                 db_system_id=dbsystem_id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI DB PATCH API Info]: {e}')
+            print(f'[ERROR: OCI DB PATCH API Info AT {compartment.name}]: {e}')
             pass
 
         return result
