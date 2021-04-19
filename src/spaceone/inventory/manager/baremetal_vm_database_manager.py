@@ -82,7 +82,7 @@ class BareMetalVMDatabaseManager(OCIManager):
             })
             bmvm_database.extend(self.set_database_resources(db_system_raw.get('list_database', []), region))
             bmvm_database.append(DBSystemResponse({'resource': db_system_resource}))
-            #bmvm_database.extend(self.set_image_resources(db_system_raw.get('list_software_images', []), region))
+            bmvm_database.extend(self.set_image_resources(db_system_raw.get('list_software_images', []), region))
             bmvm_database.extend(self.set_backup_resources(db_system_raw.get('list_backups', []), region))
 
             if bmvm_database:
