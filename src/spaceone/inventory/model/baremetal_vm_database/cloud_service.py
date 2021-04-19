@@ -18,7 +18,7 @@ dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
         'alert': ['TERMINATED', 'FAILED', 'MIGRATED', 'NEEDS_ATTENTION']
     }),
     TextDyField.data_source('Availability Domain', 'data.availability_domain'),
-    ListDyField.data_source('Fault Domains','data.fault_domains', options={
+    ListDyField.data_source('Fault Domains', 'data.fault_domains', options={
         'delimiter': '<br>'
     }),
     TextDyField.data_source('Cluster Name', 'data.cluster_name'),
