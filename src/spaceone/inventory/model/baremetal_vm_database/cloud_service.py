@@ -199,7 +199,7 @@ db_connection_strings_default = ItemDynamicLayout.set_fields('Default',
     ])
 
 db_connection_strings_all = TableDynamicLayout.set_fields('Connection Strings',
-                                                          root_path='data.all_connection_strings', fields=[
+                                                          root_path='data.connection_strings.all_connection_strings', fields=[
         TextDyField.data_source('Name', 'key'),
         TextDyField.data_source('Connection String', 'value')
     ])
