@@ -142,6 +142,7 @@ cst_bmvm_backup._metadata = CloudServiceTypeMeta.set_meta(
             'warning': ['CREATING', 'DELETING', 'RESTORING'],
             'alert': ['DELETED', 'FAILED']
         }),
+        TextDyField.data_source('Compartment', 'data.compartment_name'),
         TextDyField.data_source('Availability Domain', 'data.availability_domain'),
         DateTimeDyField.data_source('Started', 'data.time_started'),
         DateTimeDyField.data_source('Ended', 'data.time_ended')
