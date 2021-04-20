@@ -50,6 +50,7 @@ class MaintenanceRun(Model):
 
 class DatabaseSoftwareImage(Model):
     id = StringType(deserialize_from='_id')
+    region = StringType()
     compartment_id = StringType(deserialize_from='_compartment_id')
     database_version = StringType(deserialize_from='_database_version')
     display_name = StringType(deserialize_from='_display_name')
@@ -71,6 +72,12 @@ class DatabaseSoftwareImage(Model):
                                                        deserialize_from='_database_software_image_one_off_patches')
     ls_inventory = StringType(deserialize_from='_ls_inventory')
     is_upgrade_supported = BooleanType(deserialize_from='_is_upgrade_supported')
+
+    def reference(self):
+        return {
+            "resource_id": self.id,
+            "external_link": f"https://cloud.oracle.com/dbaas/dbimages/{self.id}?region={self.region}",
+        }
 
 
 class DBHome(Model):
@@ -143,11 +150,13 @@ class DataGuardAssociation(Model):
 
 class Database(Model):
     id = StringType(deserialize_from='_id')
+    region = StringType()
     compartment_id = StringType(deserialize_from='_compartment_id')
     character_set = StringType(deserialize_from='_character_set')
     ncharacter_set = StringType(deserialize_from='_ncharacter_set')
     db_home_id = StringType(deserialize_from="_db_home_id")
     db_system_id = StringType(deserialize_from='_db_system_id')
+    db_version = StringType(deserialize_from='db_version')
     vm_cluster_id = StringType(deserialize_from='_vm_cluster_id')
     db_name = StringType(deserialize_from='_db_name')
     pdb_name = StringType(deserialize_from='_pdb_name')
@@ -170,6 +179,12 @@ class Database(Model):
                                     default=[])
     list_dataguard_association = ListType(ModelType(DataGuardAssociation), deserialize_from='list_dataguard_association',
                                           default=[])
+
+    def reference(self):
+        return {
+            "resource_id": self.id,
+            "external_link": f"https://cloud.oracle.com/dbaas/dbsystems/{self.db_system_id}/databases/{self.db_home_id}/{self.id}/?region={self.region}",
+        }
 
 
 class ConsoleConnections(Model):
@@ -225,6 +240,12 @@ class Backup(Model):
     shape = StringType(deserialize_from='_shape')
     version = StringType(deserialize_from='version')
     kms_key_id = StringType(deserialize_from='_kms_key_id')
+
+    def reference(self):
+        return {
+            "resource_id": self.id,
+            "external_link": f"https://cloud.oracle.com/dbaas/backups/{self.id}?region={self.region}",
+        }
 
 
 class PatchHistory(Model):

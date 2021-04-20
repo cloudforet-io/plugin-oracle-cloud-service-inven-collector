@@ -72,6 +72,7 @@ cst_bmvm_db._metadata = CloudServiceTypeMeta.set_meta(
                                             'BACKUP_IN_PROGRESS', 'UPGRADING', 'TERMINATING'],
                                 'alert': ['TERMINATED', 'RESTORE_FAILED', 'FAILED']}),
         TextDyField.data_source('Database Unique Name', 'data.db_unique_name'),
+        TextDyField.data_source('Version', 'data.db_version'),
         TextDyField.data_source('Workload Type', 'data.db_workload'),
         DateTimeDyField.data_source('Created', 'data.time_created')
     ],
@@ -79,6 +80,7 @@ cst_bmvm_db._metadata = CloudServiceTypeMeta.set_meta(
         SearchField.set(name='Name', key='data.db_name'),
         SearchField.set(name='State', key='data.lifecycle_state'),
         SearchField.set(name='Database Unique Name', key='data.db_unique_name'),
+        SearchField.set(name='Version', key='data.db_version'),
         SearchField.set(name='Workload Type', key='data.db_workload'),
         SearchField.set(name='Created', key='data.time_created', data_type='datetime')
     ]
@@ -86,7 +88,7 @@ cst_bmvm_db._metadata = CloudServiceTypeMeta.set_meta(
 
 
 '''
-DatabaseSoftwareImages
+DatabaseSoftwareImagesß
 '''
 cst_bmvm_images = CloudServiceTypeResource()
 cst_bmvm_images.name = 'DatabaseSoftwareImages'

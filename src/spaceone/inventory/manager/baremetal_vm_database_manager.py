@@ -70,7 +70,7 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'list_patch_history': self._collect_db_system_patch_history(bmvm_conn, db_system_raw.get('list_db_Home')),
                 'list_patches': self._collect_db_system_patch(bmvm_conn, db_system_raw.get('_id'), compartment),
                 'list_backups': self._convert_object_to_list(bmvm_backup_list),
-                'list_software_images': self._update_software_images(bmvm_images_list)
+                'list_software_images': self._update_software_images(bmvm_images_list, region)
             })
 
             db_system_data = DbSystem(db_system_raw, strict=False)
@@ -90,20 +90,22 @@ class BareMetalVMDatabaseManager(OCIManager):
                 self.set_region_code(region)
 
         return bmvm_database
-
+    '''
     @staticmethod
     def _set_database_resources(databases, region):
         result = []
         for database in databases:
+
             database_data = Database(database, strict= False)
             database_resource = DatabaseResource({
                 'data': database_data,
                 'region_code': region,
+                'reference': ReferenceModel(database_data.reference()),
                 'tags': database.get('_freeform_tags', [])
             })
             result.append(DatabaseResponse({'resource': database_resource}))
         return result
-
+    '''
     def _convert_database_homes(self, db_homes):
         result = []
         for db_home in db_homes:
@@ -131,6 +133,7 @@ class BareMetalVMDatabaseManager(OCIManager):
 
                 raw.update({
                     '_connection_strings': conn_strings,
+                    'db_version': db_home.db_version,
                     '_freeform_tags': self.convert_tags(raw.get('_freeform_tags')),
                     'list_upgrade_history': self._convert_object_to_list(
                         bmvm_conn.list_db_upgrade_history(raw.get('_id'))),
@@ -189,11 +192,12 @@ class BareMetalVMDatabaseManager(OCIManager):
             result.append(backup)
         return result
 
-    def _update_software_images(self, image_list):
+    def _update_software_images(self, image_list, region):
         result = []
         for image in image_list:
             image = self.convert_nested_dictionary(self,image)
             image.update({
+                'region': region,
                 '_freeform_tags': self.convert_tags(image.get('_freeform_tags'))
             })
             result.append(image)
@@ -203,10 +207,12 @@ class BareMetalVMDatabaseManager(OCIManager):
     def set_database_resources(databases, region):
         result = []
         for database in databases:
+            database.update({'region': region})
             database_data = Database(database, strict=False)
             database_resource = DatabaseResource({
                 'data': database_data,
                 'region_code': region,
+                'reference': ReferenceModel(database_data.reference()),
                 'tags': database.get('_freeform_tags', [])
             })
             result.append(DatabaseResponse({'resource': database_resource}))
@@ -217,9 +223,10 @@ class BareMetalVMDatabaseManager(OCIManager):
         result = []
         for image in images:
             image_data = DatabaseSoftwareImage(image, strict=False)
-            image_resource = DatabaseResource({
+            image_resource = DatabaseSoftwareImagesResource({
                 'data': image_data,
                 'region_code': region,
+                'reference': ReferenceModel(image_data.reference()),
                 'tags': image.get('_freeform_tags', [])
             })
             result.append(DatabaseSoftwareImagesResponse({'resource': image_resource}))
@@ -229,6 +236,7 @@ class BareMetalVMDatabaseManager(OCIManager):
     def set_backup_resources(backups, region):
         result = []
         for backup in backups:
+            backup.update({'region':region})
             backup_data = Backup(backup, strict=False)
             backup_resource =  BackupResource({
                 'data': backup_data,
