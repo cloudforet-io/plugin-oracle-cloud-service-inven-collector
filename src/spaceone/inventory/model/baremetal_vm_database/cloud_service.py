@@ -150,7 +150,7 @@ db_base = ItemDynamicLayout.set_fields('General Info', fields=[
                                 'warning': ['PROVISIONING', 'UPDATING',
                                             'BACKUP_IN_PROGRESS', 'UPGRADING', 'TERMINATING'],
                                 'alert': ['TERMINATED', 'RESTORE_FAILED', 'FAILED']}),
-    TextDyField.data_source('Version', 'data.db_versionß'),
+    TextDyField.data_source('Version', 'data.db_version'),
     TextDyField.data_source('Workload Type', 'data.db_workload'),
     TextDyField.data_source('Unique Name', 'data.db_unique_name'),
     TextDyField.data_source('PDB Name', 'data.pdb_name'),
