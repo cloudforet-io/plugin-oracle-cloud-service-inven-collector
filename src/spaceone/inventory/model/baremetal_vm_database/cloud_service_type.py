@@ -88,7 +88,7 @@ cst_bmvm_db._metadata = CloudServiceTypeMeta.set_meta(
 
 
 '''
-DatabaseSoftwareImagesß
+DatabaseSoftwareImages
 '''
 cst_bmvm_images = CloudServiceTypeResource()
 cst_bmvm_images.name = 'DatabaseSoftwareImages'
@@ -134,7 +134,7 @@ cst_bmvm_backup.tags = {
     'spaceone:icon': 'https://spaceone-custom-assets.s3.ap-northeast-2.amazonaws.com/console-assets/icons/cloud-services/oci/OCI_icon_Database_Service.svg'
 }
 
-cst_bmvm_images._metadata = CloudServiceTypeMeta.set_meta(
+cst_bmvm_backup._metadata = CloudServiceTypeMeta.set_meta(
     fields=[
         TextDyField.data_source('Display Name', 'data.display_name'),
         EnumDyField.data_source('State', 'data.lifecycle_state', default_state={
@@ -149,6 +149,7 @@ cst_bmvm_images._metadata = CloudServiceTypeMeta.set_meta(
     search=[
         SearchField.set(name='Display Name', key='data.display_name'),
         SearchField.set(name='State', key='data.lifecycle_state'),
+        SearchField.set(name='Source DB ID', key='data.database_id'),
         SearchField.set(name='Availability Domain', key='data.availability_domain'),
         SearchField.set(name='Stated', key='data.time_started', data_type='datetime'),
         SearchField.set(name='Ended', key='data.time_ended', data_type='datetime')
