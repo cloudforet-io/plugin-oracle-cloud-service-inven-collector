@@ -51,6 +51,7 @@ class MaintenanceRun(Model):
 class DatabaseSoftwareImage(Model):
     id = StringType(deserialize_from='_id')
     region = StringType()
+    compartment_name = StringType()
     compartment_id = StringType(deserialize_from='_compartment_id')
     database_version = StringType(deserialize_from='_database_version')
     display_name = StringType(deserialize_from='_display_name')
@@ -220,6 +221,8 @@ class DbNode(Model):
 
 class Backup(Model):
     id = StringType(deserialize_from='_id')
+    compartment_name = StringType()
+    region = StringType()
     compartment_id = StringType(deserialize_from='_compartment_id')
     database_id = StringType(deserialize_from='_database_id')
     display_name = StringType(deserialize_from='_display_name')

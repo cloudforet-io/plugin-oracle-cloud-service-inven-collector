@@ -222,6 +222,7 @@ Database Software Images
 db_image_base = ItemDynamicLayout.set_fields('General Info', fields=[
     TextDyField.data_source('Name', 'data.display_name'),
     TextDyField.data_source('Id', 'data.id'),
+    TextDyField.data_source('Compartment', 'data.compartment_name'),
     TextDyField.data_source('DB version', 'data.database_version'),
     EnumDyField.data_source('State', 'data.lifecycle_state', default_state={
         'safe': ['AVAILABLE'],
@@ -232,7 +233,10 @@ db_image_base = ItemDynamicLayout.set_fields('General Info', fields=[
                             default_outline_badge=['GRID_IMAGE', 'DATABASE_IMAGE']),
     EnumDyField.data_source('Image Shape', 'data.image_shape_family',
                             default_outline_badge=['VM_BM_SHAPE', 'EXADATA_SHAPE']),
-    TextDyField.data_source('Patch Set', 'data.patch_set'),
+    TextDyField.data_source('PSU/BP/RU', 'data.patch_set'),
+    ListDyField.data_source('One-Off Patches', 'data.database_software_image_one_off_patches', options={
+        'delimiter': '<br>'
+    }),
     EnumDyField.data_source('Upgrade Supported', 'data.is_upgrade_supported',
                             default_badge={'indigo.500': ['true'], 'coral.600': ['false']}),
     DateTimeDyField.data_source('Created', 'data.time_created')
@@ -251,7 +255,8 @@ Backup
 '''
 db_backup_base = TableDynamicLayout.set_fields('General Info', fields=[
     TextDyField.data_source('Id', 'data.id'),
-    TextDyField.data_source('Compartment Id', 'data.compartment_id'),
+    TextDyField.data_source('Compartment', 'data.compartment_name'),
+    TextDyField.data_source('Source DB ID', 'data.database_id'),
     EnumDyField.data_source('Type', 'data.type',
                             default_outline_badge=['INCREMENTAL', 'FULL', 'VIRTUAL_FULL']),
     TextDyField.data_source('Version', 'data.version'),
