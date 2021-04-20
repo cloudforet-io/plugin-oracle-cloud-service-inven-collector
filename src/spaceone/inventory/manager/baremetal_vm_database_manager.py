@@ -70,7 +70,7 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'list_patch_history': self._collect_db_system_patch_history(bmvm_conn, db_system_raw.get('list_db_Home')),
                 'list_patches': self._collect_db_system_patch(bmvm_conn, db_system_raw.get('_id'), compartment),
                 'list_backups': self._convert_object_to_list(bmvm_backup_list),
-                'list_software_images': self._update_software_images(bmvm_images_list, region)
+                'list_software_images': self._update_software_images(bmvm_images_list, region, compartment)
             })
 
             db_system_data = DbSystem(db_system_raw, strict=False)
@@ -83,7 +83,7 @@ class BareMetalVMDatabaseManager(OCIManager):
             bmvm_database.extend(self.set_database_resources(db_system_raw.get('list_database', []), region))
             bmvm_database.append(DBSystemResponse({'resource': db_system_resource}))
             bmvm_database.extend(self.set_image_resources(db_system_raw.get('list_software_images', []), region))
-            bmvm_database.extend(self.set_backup_resources(db_system_raw.get('list_backups', []), region))
+            bmvm_database.extend(self.set_backup_resources(db_system_raw.get('list_backups', []), region, compartment))
 
             if bmvm_database:
                 print(f"SET REGION CODE FROM BareMetal,VM DB... {params.get('region')} // {params.get('compartment').name}")
@@ -192,12 +192,13 @@ class BareMetalVMDatabaseManager(OCIManager):
             result.append(backup)
         return result
 
-    def _update_software_images(self, image_list, region):
+    def _update_software_images(self, image_list, region, compartment):
         result = []
         for image in image_list:
             image = self.convert_nested_dictionary(self,image)
             image.update({
                 'region': region,
+                'compartment_name': compartment.name,
                 '_freeform_tags': self.convert_tags(image.get('_freeform_tags'))
             })
             result.append(image)
@@ -233,12 +234,12 @@ class BareMetalVMDatabaseManager(OCIManager):
         return result
 
     @staticmethod
-    def set_backup_resources(backups, region):
+    def set_backup_resources(backups, region, compartment):
         result = []
         for backup in backups:
-            backup.update({'region':region})
+            backup.update({'region': region, 'compartment_name': compartment.name})
             backup_data = Backup(backup, strict=False)
-            backup_resource =  BackupResource({
+            backup_resource = BackupResource({
                 'data': backup_data,
                 'region_code': region,
                 'tags': backup.get('_freeform_tags', [])
