@@ -259,7 +259,6 @@ db_backup_base = ItemDynamicLayout.set_fields('General Info', fields=[
     TextDyField.data_source('Source DB ID', 'data.database_id'),
     EnumDyField.data_source('Type', 'data.type',
                             default_outline_badge=['INCREMENTAL', 'FULL', 'VIRTUAL_FULL']),
-    TextDyField.data_source('Version', 'data.version'),
     EnumDyField.data_source('Edition', 'data.database_edition',
                             default_outline_badge=['STANDARD_EDITION', 'ENTERPRISE_EDITION',
                                                    'ENTERPRISE_EDITION_HIGH_PERFORMANCE',
