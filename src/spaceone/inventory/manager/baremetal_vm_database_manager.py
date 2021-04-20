@@ -242,6 +242,7 @@ class BareMetalVMDatabaseManager(OCIManager):
             backup_resource = BackupResource({
                 'data': backup_data,
                 'region_code': region,
+                'reference': ReferenceModel(backup_data.reference()),
                 'tags': backup.get('_freeform_tags', [])
             })
             result.append(BackupResponse({'resource': backup_resource}))
