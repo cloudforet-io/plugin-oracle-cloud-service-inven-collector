@@ -253,7 +253,7 @@ db_image_metadata = CloudServiceMeta.set_layouts([db_image_base, db_image_tags])
 '''
 Backup
 '''
-db_backup_base = TableDynamicLayout.set_fields('General Info', fields=[
+db_backup_base = ItemDynamicLayout.set_fields('General Info', fields=[
     TextDyField.data_source('Id', 'data.id'),
     TextDyField.data_source('Compartment', 'data.compartment_name'),
     TextDyField.data_source('Source DB ID', 'data.database_id'),
