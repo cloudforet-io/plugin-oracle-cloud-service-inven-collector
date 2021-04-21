@@ -3,10 +3,10 @@ from spaceone.inventory.libs.schema.cloud_service_type import CloudServiceTypeRe
     CloudServiceTypeMeta
 
 '''
-DBSystems
+DBSystem
 '''
 cst_bmvm_dbsystems = CloudServiceTypeResource()
-cst_bmvm_dbsystems.name = 'DBSystems'
+cst_bmvm_dbsystems.name = 'DBSystem'
 cst_bmvm_dbsystems.provider = 'oracle_cloud'
 cst_bmvm_dbsystems.group = 'BareMetalVMDatabase'
 cst_bmvm_dbsystems.labels = ['Database']
@@ -32,10 +32,7 @@ cst_bmvm_dbsystems._metadata = CloudServiceTypeMeta.set_meta(
             'display_unit': 'GB',
             'source_unit': 'GB'
         }),
-        EnumDyField.data_source('Edition', 'data.database_edition',
-                                default_outline_badge=['STANDARD_EDITION', 'ENTERPRISE_EDITION',
-                                                       'ENTERPRISE_EDITION_HIGH_PERFORMANCE',
-                                                       'ENTERPRISE_EDITION_EXTREME_PERFORMANCE']),
+        TextDyField.data_source('Edition', 'data.database_edition'),
         DateTimeDyField.data_source('Created', 'data.time_created'),
     ],
     search=[
@@ -88,10 +85,10 @@ cst_bmvm_db._metadata = CloudServiceTypeMeta.set_meta(
 
 
 '''
-DatabaseSoftwareImages
+DatabaseSoftwareImage
 '''
 cst_bmvm_images = CloudServiceTypeResource()
-cst_bmvm_images.name = 'DatabaseSoftwareImages'
+cst_bmvm_images.name = 'DatabaseSoftwareImage'
 cst_bmvm_images.provider = 'oracle_cloud'
 cst_bmvm_images.group = 'BareMetalVMDatabase'
 cst_bmvm_images.labels = ['Database']
