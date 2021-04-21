@@ -9,7 +9,7 @@ from spaceone.inventory.libs.schema.metadata.dynamic_layout import ItemDynamicLa
 from spaceone.inventory.libs.schema.cloud_service import CloudServiceResource, CloudServiceResponse, CloudServiceMeta
 
 '''
-DBSystems
+DBSystem
 '''
 dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
     EnumDyField.data_source('Lifecycle State', 'data.lifecycle_state', default_state={
@@ -28,10 +28,7 @@ dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
     DateTimeDyField.data_source('Created', 'data.time_created'),
     TextDyField.data_source('Time Zone', 'data.time_zone'),
     TextDyField.data_source('Compartment', 'data.compartment_name'),
-    EnumDyField.data_source('Oracle Database Software Edition', 'data.database_edition',
-                            default_outline_badge=['STANDARD_EDITION', 'ENTERPRISE_EDITION',
-                                                   'ENTERPRISE_EDITION_HIGH_PERFORMANCE',
-                                                   'ENTERPRISE_EDITION_EXTREME_PERFORMANCE']),
+    TextDyField.data_source('Oracle Database Software Edition', 'data.database_edition'),
     TextDyField.data_source('Storage Management Software', 'data.db_system_options.storage_management'),
     SizeField.data_source('Storage Size', 'data.data_storage_size_in_gbs', options={
         'display_unit': 'GB',
@@ -217,7 +214,7 @@ db_metadata = CloudServiceMeta.set_layouts([db_base, db_update_history, db_datag
                                             db_connection_meta, db_tags])
 
 '''
-Database Software Images
+Database Software Image
 '''
 db_image_base = ItemDynamicLayout.set_fields('General Info', fields=[
     TextDyField.data_source('Name', 'data.display_name'),
@@ -285,7 +282,7 @@ class BaremetalVMResource(CloudServiceResource):
 
 # DbSystems
 class DBSystemsResource(BaremetalVMResource):
-    cloud_service_type = StringType(default='DBSystems')
+    cloud_service_type = StringType(default='DBSystem')
     data = ModelType(DbSystem)
     _metadata = ModelType(CloudServiceMeta, default=dbsystem_metadata, serialized_name='metadata')
 
@@ -307,7 +304,7 @@ class DatabaseResponse(CloudServiceResponse):
 
 # DatabaseSoftwareImages
 class DatabaseSoftwareImagesResource(BaremetalVMResource):
-    cloud_service_type = StringType(default='DatabaseSoftwareImages')
+    cloud_service_type = StringType(default='DatabaseSoftwareImage')
     data = ModelType(DatabaseSoftwareImage)
     _metadata = ModelType(CloudServiceMeta, default=db_image_metadata, serialized_name='metadata')
 

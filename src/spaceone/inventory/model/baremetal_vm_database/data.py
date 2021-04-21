@@ -14,38 +14,38 @@ class DbSystemOptions(Model):
 
 
 class Maintenancewindow(Model):
-    preference = StringType(deserialize_from='preference')
-    months = StringType(deserialize_from='months')
-    weeks_of_month = StringType(deserialize_from='weeks_of_month')
-    hours_of_day = StringType(deserialize_from='hours_of_day')
-    days_of_week = StringType(deserialize_from='days_of_week')
-    lead_time_in_week = StringType(deserialize_from='lead_time_in_weeks')
-    display = StringType(deserialize_from='display')
+    preference = StringType(deserialize_from='preference', serialize_when_none=False)
+    months = StringType(deserialize_from='months', serialize_when_none=False)
+    weeks_of_month = StringType(deserialize_from='weeks_of_month', serialize_when_none=False)
+    hours_of_day = StringType(deserialize_from='hours_of_day', serialize_when_none=False)
+    days_of_week = StringType(deserialize_from='days_of_week', serialize_when_none=False)
+    lead_time_in_week = StringType(deserialize_from='lead_time_in_weeks', serialize_when_none=False)
+    display = StringType(deserialize_from='display', serialize_when_none=False)
 
 
 class MaintenanceRun(Model):
-    id = StringType(deserialize_from='id')
-    display_name = StringType(deserialize_from='display_name')
-    description = StringType(deserialize_from='description')
+    id = StringType(deserialize_from='id', serialize_when_none=False)
+    display_name = StringType(deserialize_from='display_name', serialize_when_none=False)
+    description = StringType(deserialize_from='description', serialize_when_none=False)
     lifecycle_state = StringType(deserialize_from='lifecycle_state',
                                  choices=('SCHEDULED', 'IN_PROGRESS', 'SUCCEEDED',
                                           'SKIPPED', 'FAILED', 'UPDATING',
-                                          'DELETING', 'DELETED', 'CANCELED'))
-    time_scheduled = DateTimeType(deserialize_from='time_scheduled')
-    time_started = DateTimeType(deserialize_from='time_started')
-    time_ended = DateTimeType(deserialize_from='time_ended')
+                                          'DELETING', 'DELETED', 'CANCELED'), serialize_when_none=False)
+    time_scheduled = DateTimeType(deserialize_from='time_scheduled', serialize_when_none=False)
+    time_started = DateTimeType(deserialize_from='time_started', serialize_when_none=False)
+    time_ended = DateTimeType(deserialize_from='time_ended', serialize_when_none=False)
     target_resource_type = StringType(deserialize_from='target_resource_type',
                                       choices=('AUTONOMOUS_EXADATA_INFRASTRUCTURE', 'AUTONOMOUS_CONTAINER_DATABASE',
                                                'EXADATA_DB_SYSTEM', 'CLOUD_EXADATA_INFRASTRUCTURE',
-                                               'EXACC_INFRASTRUCTURE', 'AUTONOMOUS_DATABASE'))
-    target_resource_id = StringType(deserialize_from='target_resource_id')
+                                               'EXACC_INFRASTRUCTURE', 'AUTONOMOUS_DATABASE'), serialize_when_none=False)
+    target_resource_id = StringType(deserialize_from='target_resource_id', serialize_when_none=False)
     maintenance_type = StringType(deserialize_from='maintenance_type',
-                                  choices=('PLANNED', 'UNPLANNED'))
+                                  choices=('PLANNED', 'UNPLANNED'), serialize_when_none=False)
     maintenance_subtype = StringType(deserialize_from='maintenance_subtype',
                                      choices=('QUARTERLY', 'HARDWARE', 'CRITICAL',
-                                              'INFRASTRUCTURE', 'DATABASE', 'ONEOFF'))
-    maintenance_display = StringType(deserialize_from='maintenance_display')
-    maintenance_alert = StringType(deserialize_from='maintenance_alert')
+                                              'INFRASTRUCTURE', 'DATABASE', 'ONEOFF'), serialize_when_none=False)
+    maintenance_display = StringType(deserialize_from='maintenance_display', serialize_when_none=False)
+    maintenance_alert = StringType(deserialize_from='maintenance_alert', serialize_when_none=False)
 
 
 class DatabaseSoftwareImage(Model):
@@ -82,22 +82,22 @@ class DatabaseSoftwareImage(Model):
 
 
 class DBHome(Model):
-    compartment_id = StringType(deserialize_from='_compartment_id')
-    database_software_image_id = StringType(deserialize_from='_database_software_image_id')
-    db_home_location = StringType(deserialize_from='db_home_location')
-    db_system_id = StringType(deserialize_from='_db_system_id')
-    db_version = StringType(deserialize_from='_db_version')
-    display_name = StringType(deserialize_from='_display_name')
+    compartment_id = StringType(deserialize_from='_compartment_id', serialize_when_none=False)
+    database_software_image_id = StringType(deserialize_from='_database_software_image_id', serialize_when_none=False)
+    db_home_location = StringType(deserialize_from='db_home_location', serialize_when_none=False)
+    db_system_id = StringType(deserialize_from='_db_system_id', serialize_when_none=False)
+    db_version = StringType(deserialize_from='_db_version', serialize_when_none=False)
+    display_name = StringType(deserialize_from='_display_name', serialize_when_none=False)
     id = StringType(deserialize_from='_id')
-    kms_key_id = StringType(deserialize_from='_kms_key_id')
-    last_patch_history_entry_id = StringType(deserialize_from='_last_patch_history_entry_id')
-    lifecycle_details = StringType(deserialize_from='_lifecycle_details')
+    kms_key_id = StringType(deserialize_from='_kms_key_id', serialize_when_none=False)
+    last_patch_history_entry_id = StringType(deserialize_from='_last_patch_history_entry_id', serialize_when_none=False)
+    lifecycle_details = StringType(deserialize_from='_lifecycle_details', serialize_when_none=False)
     lifecycle_state = StringType(deserialize_from='_lifecycle_state',
                                  choices=( 'PROVISIONING', 'AVAILABLE', 'UPDATING',
                                            'TERMINATING', 'TERMINATED', 'FAILED'))
     one_off_patches = ListType(StringType, deserialize_from='_one_off_patches')
     time_created = DateTimeType(deserialize_from='_time_created')
-    vm_cluster_id = StringType(deserialize_from='_vm_cluster_id')
+    vm_cluster_id = StringType(deserialize_from='_vm_cluster_id', serialize_when_none=False)
 
 
 class ConnectionStrings(Model):
