@@ -1,2 +1,3 @@
 from spaceone.inventory.manager.autonomous_database_manager import AutonomousDatabaseManager
 from spaceone.inventory.manager.baremetal_vm_database_manager import BareMetalVMDatabaseManager
+from spaceone.inventory.manager.exadata_cloud_database_manager import ExadataCloudDatabaseConnector

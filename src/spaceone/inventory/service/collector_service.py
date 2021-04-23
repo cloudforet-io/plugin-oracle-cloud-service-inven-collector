@@ -30,7 +30,8 @@ class CollectorService(BaseService):
         self.execute_managers = [
             # set Oracle cloud service manager
             'AutonomousDatabaseManager',
-            'BareMetalVMDatabaseManager'
+            'BareMetalVMDatabaseManager',
+            #'ExadataCloudDatabaseManager'
         ]
 
     @check_required(['options'])

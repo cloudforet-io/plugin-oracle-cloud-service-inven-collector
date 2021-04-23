@@ -1,3 +1,4 @@
 from spaceone.inventory.libs.connector import OCIConnector
 from spaceone.inventory.connector.autonomous_database import AutonomousDatabaseConnector
 from spaceone.inventory.connector.baremetal_vm_database import BareMetalVMDatabaseConnector
+from spaceone.inventory.connector.exadata_cloud_database import ExadataCloudDatabaseConnector
