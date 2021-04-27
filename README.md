@@ -29,6 +29,8 @@ Registered service account on SpaceONE must have certain permissions to collect 
    - [Required IAM Policy](#Required IAM Policy)
    - [Database](#Database)
        - [AutonomousDatabase](#AutonomousDatabase)
+       - [BareMetalVMDatabase](#BareMetalVMDatabase)
+       - [ExadataCloudDatabase](#ExadataCloudDatabase)
     
 --- 
 #### [Required IAM Policy](https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm)
@@ -84,6 +86,12 @@ More information about the IAM is available at the following [link](https://docs
        
    - IAM 
       *  Allow group {group_name} to inspect database-family in tenancy
+    
+
+
+
+
+
 
 
 
