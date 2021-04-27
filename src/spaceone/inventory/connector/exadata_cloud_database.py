@@ -32,20 +32,26 @@ class ExadataCloudDatabaseConnector(OCIConnector):
 
         return result
 
-    def list_cloud_exadata_infra(self,compartment):
+    def list_cloud_exadata_infra(self, compartment):
         result = []
+        if compartment.name == 'ManagedCompartmentForPaaS':
+            return []
+
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_cloud_exadata_infrastructures,
                 compartment.id
             ).data
         except oci.exceptions.ServiceError as e:
-            print(f'[ERROR: OCI ListCloudExadataInfra API Info]: {e}')
-            raise e
+            print(f'[ERROR: OCI ListCloudExadataInfra API Info AT {compartment.name}]: {e}')
+            pass
         return result
 
     def list_cloud_vm_cluster(self, compartment, exadata_infra_id):
         result = []
+        if compartment.name == 'ManagedCompartmentForPaaS':
+            return []
+
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_cloud_vm_clusters,
@@ -59,6 +65,7 @@ class ExadataCloudDatabaseConnector(OCIConnector):
 
     def list_vm_cluster_update_history(self, cluster_id):
         result = []
+
         try:
             result = oci.pagination.list_call_get_all_results(
                 self.database_client.list_cloud_vm_cluster_update_history_entries,

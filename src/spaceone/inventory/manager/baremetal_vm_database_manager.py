@@ -49,7 +49,6 @@ class BareMetalVMDatabaseManager(OCIManager):
                 continue
             '''
             db_system_raw = self.convert_nested_dictionary(self, db_system)
-            #pprint(db_system_raw)
             db_homes = bmvm_conn.list_database_home(compartment, db_system_raw['_id'])
             db_nodes, node_conn = self._collect_db_nodes(bmvm_conn, compartment, db_system_raw.get('_id'))
             db_system_raw.update({
@@ -90,22 +89,7 @@ class BareMetalVMDatabaseManager(OCIManager):
                 self.set_region_code(region)
 
         return bmvm_database
-    '''
-    @staticmethod
-    def _set_database_resources(databases, region):
-        result = []
-        for database in databases:
 
-            database_data = Database(database, strict= False)
-            database_resource = DatabaseResource({
-                'data': database_data,
-                'region_code': region,
-                'reference': ReferenceModel(database_data.reference()),
-                'tags': database.get('_freeform_tags', [])
-            })
-            result.append(DatabaseResponse({'resource': database_resource}))
-        return result
-    '''
     def _convert_database_homes(self, db_homes):
         result = []
         for db_home in db_homes:

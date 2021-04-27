@@ -34,7 +34,7 @@ exadata_infra_base = ItemDynamicLayout.set_fields('General Info', fields=[
         'display_unit': 'GB',
         'source_unit': 'GB'
     }),
-    TextDyField.data_source('Maintenance Window' 'data.maintenance_window.display'),
+    #TextDyField.data_source('Maintenance Window' 'data.maintenance_window.display'),
     DateTimeDyField.data_source('Created', 'data.time_created')
 ])
 
@@ -171,7 +171,7 @@ vm_cluster_database = TableDynamicLayout.set_fields('Database', root_path='data.
         'alert': ['TERMINATED', 'RESTORE_FAILED', 'FAILED']
     }),
     TextDyField.data_source('Database Unique Name', 'db_unique_name'),
-    TextDyField.data_source('Workload Type'),
+    TextDyField.data_source('Workload Type', 'db_workload'),
     DateTimeDyField.data_source('Created', 'time_created')
 ])
 
