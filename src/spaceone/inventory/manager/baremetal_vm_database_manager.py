@@ -77,7 +77,8 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'data': db_system_data,
                 'region_code': region,
                 'reference': ReferenceModel(db_system_data.reference()),
-                'tags': db_system_raw.get('_freeform_tags', [])
+                'tags': db_system_raw.get('_freeform_tags', []),
+                'name': db_system_data.display_name
             })
             bmvm_database.extend(self.set_database_resources(db_system_raw.get('list_database', []), region))
             bmvm_database.append(DBSystemResponse({'resource': db_system_resource}))
@@ -198,7 +199,8 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'data': database_data,
                 'region_code': region,
                 'reference': ReferenceModel(database_data.reference()),
-                'tags': database.get('_freeform_tags', [])
+                'tags': database.get('_freeform_tags', []),
+                'name': database_data.db_name
             })
             result.append(DatabaseResponse({'resource': database_resource}))
         return result
@@ -212,7 +214,8 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'data': image_data,
                 'region_code': region,
                 'reference': ReferenceModel(image_data.reference()),
-                'tags': image.get('_freeform_tags', [])
+                'tags': image.get('_freeform_tags', []),
+                'name': image_data.display_name
             })
             result.append(DatabaseSoftwareImagesResponse({'resource': image_resource}))
         return result
@@ -227,7 +230,8 @@ class BareMetalVMDatabaseManager(OCIManager):
                 'data': backup_data,
                 'region_code': region,
                 'reference': ReferenceModel(backup_data.reference()),
-                'tags': backup.get('_freeform_tags', [])
+                'tags': backup.get('_freeform_tags', []),
+                'name': backup_data.display_name
             })
             result.append(BackupResponse({'resource': backup_resource}))
         return result

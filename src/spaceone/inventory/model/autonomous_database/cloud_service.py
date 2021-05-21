@@ -163,6 +163,7 @@ class DatabaseResource(AutonomousDatabaseResource):
     cloud_service_type = StringType(default='Database')
     data = ModelType(Database)
     _metadata = ModelType(CloudServiceMeta, default=adb_meta, serialized_name='metadata')
+    name = StringType()
 
 
 class DatabaseResponse(CloudServiceResponse):
