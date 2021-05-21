@@ -70,7 +70,8 @@ class ExadataCloudDatabaseManager(OCIManager):
                 'data': exadata_infra_data,
                 'region_code': region,
                 'reference': ReferenceModel(exadata_infra_data.reference()),
-                'tags': exadata_infra_raw.get('_freeform_tags', [])
+                'tags': exadata_infra_raw.get('_freeform_tags', []),
+                'name': exadata_infra_data.display_name
             })
             result.append(ExadataInfrastructureResponse({'resource': exadata_infra_resource}))
             result.extend(exadata_vm_database_list)
@@ -202,7 +203,8 @@ class ExadataCloudDatabaseManager(OCIManager):
                 'data': image_data,
                 'region_code': region,
                 'reference': ReferenceModel(image_data.reference()),
-                'tags': image.get('_freeform_tags', [])
+                'tags': image.get('_freeform_tags', []),
+                'name': image_data.display_name
             })
             result.append(ExadataDatabaseSoftwareImageResponse({'resource': image_resource}))
 
@@ -222,7 +224,8 @@ class ExadataCloudDatabaseManager(OCIManager):
                     'data': db_data,
                     'region_code': region,
                     'reference': ReferenceModel(db_data.reference()),
-                    'tags': db.get('_freeform_tags', [])
+                    'tags': db.get('_freeform_tags', []),
+                    'name': db_data.db_name
                 })
                 result.append(ExadataDatabaseResponse({'resource': db_resource}))
                 backup_list.extend(db_backup)
@@ -238,7 +241,8 @@ class ExadataCloudDatabaseManager(OCIManager):
                 'data': backup_data,
                 'region_code': region,
                 'reference': ReferenceModel(backup_data.reference()),
-                'tags': backup.get('_freeform_tags', [])
+                'tags': backup.get('_freeform_tags', []),
+                'name': backup_data.display_name
             })
             result.append(ExadataBackupResponse({'resource': backup_resource}))
         return result

@@ -348,6 +348,7 @@ class ExadataInfrastructureResource(ExadataCloudResource):
     cloud_service_type = StringType(default='ExadataInfrastructure')
     data = ModelType(CloudExadataInfra)
     _metadata = ModelType(CloudServiceMeta, default=exadata_infra_meta, serialized_name='metadata')
+    name = StringType()
 
 
 class ExadataInfrastructureResponse(CloudServiceResponse):
@@ -359,6 +360,7 @@ class ExadataVMClusterResource(ExadataCloudResource):
     cloud_service_type = StringType(default='ExadataVMCluster')
     data = ModelType(CloudVMCluster)
     _metadata = ModelType(CloudServiceMeta, default=vm_cluster_meta, serialized_name='metadata')
+    name = StringType()
 
 
 class ExadataVMClusterResponse(CloudServiceResponse):
@@ -370,7 +372,7 @@ class ExadataDatabaseResource(ExadataCloudResource):
     cloud_service_group = StringType(default='Database')
     data = ModelType(Database)
     _metadata = ModelType(CloudServiceMeta, default=vm_db_metadata, serialized_name='metadata')
-
+    name = StringType()
 
 class ExadataDatabaseResponse(CloudServiceResponse):
     resource = PolyModelType(ExadataDatabaseResource)

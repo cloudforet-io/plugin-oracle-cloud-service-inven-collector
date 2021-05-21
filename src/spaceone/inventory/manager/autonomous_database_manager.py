@@ -61,7 +61,8 @@ class AutonomousDatabaseManager(OCIManager):
                 'data': autonomous_db_data,
                 'region_code': autonomous_db_data.region,
                 'reference': ReferenceModel(autonomous_db_data.reference()),
-                'tags': adb_raw['_freeform_tags']
+                'tags': adb_raw['_freeform_tags'],
+                'name': autonomous_db_data.display_name
             })
             # self.set_region_code(autonomous_db_data.region)
             autonomous_database_list.append(DatabaseResponse({'resource': autonomous_db_resource}))

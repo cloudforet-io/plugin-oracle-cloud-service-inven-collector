@@ -86,20 +86,12 @@ More information about the IAM is available at the following [link](https://docs
        
    - IAM 
       *  Allow group {group_name} to inspect database-family in tenancy
+      *  Allow group {group_name} to inspect exadata-infrastructures in tenancy
+
+
+
+
+
+
+
     
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
