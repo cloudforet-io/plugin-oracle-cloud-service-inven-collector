@@ -25,6 +25,7 @@ class CloudServiceResource(Model):
     cloud_service_type = StringType()
     cloud_service_group = StringType()
     tags = ListType(ModelType(Tags), serialize_when_none=False)
+    name = StringType()
     data = PolyModelType(Model, default=lambda: {})
     reference = ModelType(ReferenceModel)
     region_code = StringType()

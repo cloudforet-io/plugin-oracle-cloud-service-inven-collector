@@ -309,7 +309,7 @@ class DbSystem(Model):
     lifecycle_state = StringType(deserialize_from='_lifecycle_state',
                                  choices=('AVAILABLE', 'UPDATING', 'TERMINATING',
                                           'TERMINATED', 'FAILED', 'MIGRATED',
-                                          'MAINTENANCE_IN_PROGRESS', 'NEEDS_ATTENTION'))
+                                          'MAINTENANCE_IN_PROGRESS', 'NEEDS_ATTENTION', 'PROVISIONING'))
     time_created = DateTimeType(deserialize_from='_time_created')
     lifecycle_details = StringType(deserialize_from='_lifecycle_details', serialize_when_none=False)
     disk_redundancy = StringType(deserialize_from='_disk_redundancy',

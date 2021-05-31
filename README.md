@@ -29,6 +29,8 @@ Registered service account on SpaceONE must have certain permissions to collect 
    - [Required IAM Policy](#Required IAM Policy)
    - [Database](#Database)
        - [AutonomousDatabase](#AutonomousDatabase)
+       - [BareMetalVMDatabase](#BareMetalVMDatabase)
+       - [ExadataCloudDatabase](#ExadataCloudDatabase)
     
 --- 
 #### [Required IAM Policy](https://docs.oracle.com/en-us/iaas/Content/Identity/Concepts/policies.htm)
@@ -53,7 +55,43 @@ More information about the IAM is available at the following [link](https://docs
     
     - IAM
         * Allow group {group_name} to inspect autonomous-database-family in tenancy
-
-
    
+- ##### BareMetalVMDatabase
+   -   Scopes
+         
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_backups
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_console_connections
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_database_software_images
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_databases
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_db_homes
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_db_nodes
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_maintenance_runs
+         * 
+   - IAM 
+      *  Allow group {group_name} to inspect database-family in tenancy
+    
+- ##### ExadataCloudDatabase
+   -   Scopes
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_cloud_exadata_infrastructures
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_cloud_vm_clusters
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_backups
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_cloud_vm_cluster_update_history_entries
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_cloud_vm_cluster_updates
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_console_connections
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_database_software_images
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_databases
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_db_homes
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_db_nodes
+         * https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/en/latest/api/database/client/oci.database.DatabaseClient.html#oci.database.DatabaseClient.list_maintenance_runs
+       
+   - IAM 
+      *  Allow group {group_name} to inspect database-family in tenancy
+      *  Allow group {group_name} to inspect exadata-infrastructures in tenancy
 
+
+
+
+
+
+
+    
