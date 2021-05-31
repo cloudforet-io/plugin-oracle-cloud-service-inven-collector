@@ -22,7 +22,7 @@ cst_bmvm_dbsystems._metadata = CloudServiceTypeMeta.set_meta(
         TextDyField.data_source('Display Name', 'data.display_name'),
         EnumDyField.data_source('State', 'data.lifecycle_state', default_state={
             'safe': ['AVAILABLE'],
-            'warning': ['UPDATING', 'TERMINATING', 'MAINTENANCE_IN_PROGRESS, PROVISIONING'],
+            'warning': ['UPDATING', 'TERMINATING', 'MAINTENANCE_IN_PROGRESS', 'PROVISIONING'],
             'alert': ['TERMINATED', 'FAILED', 'MIGRATED', 'NEEDS_ATTENTION']
         }),
         TextDyField.data_source('Availability Domain', 'data.availability_domain'),
