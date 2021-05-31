@@ -14,7 +14,7 @@ DBSystem
 dbsystem_base = ItemDynamicLayout.set_fields('General Info', fields=[
     EnumDyField.data_source('Lifecycle State', 'data.lifecycle_state', default_state={
         'safe': ['ACTIVE'],
-        'warning': ['UPDATING', 'TERMINATING', 'MAINTENANCE_IN_PROGRESS'],
+        'warning': ['UPDATING', 'TERMINATING', 'MAINTENANCE_IN_PROGRESS', 'PROVISIONING'],
         'alert': ['TERMINATED', 'FAILED', 'MIGRATED', 'NEEDS_ATTENTION']
     }),
     TextDyField.data_source('Availability Domain', 'data.availability_domain'),
