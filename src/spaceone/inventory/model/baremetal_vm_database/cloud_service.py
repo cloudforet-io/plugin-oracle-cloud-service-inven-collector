@@ -287,6 +287,7 @@ class DBSystemsResource(BaremetalVMResource):
     _metadata = ModelType(CloudServiceMeta, default=dbsystem_metadata, serialized_name='metadata')
     name = StringType()
 
+
 class DBSystemResponse(CloudServiceResponse):
     resource = PolyModelType(DBSystemsResource)
 
@@ -297,6 +298,7 @@ class DatabaseResource(BaremetalVMResource):
     data = ModelType(Database)
     _metadata = ModelType(CloudServiceMeta, default=db_metadata, serialized_name='metadata')
     name = StringType()
+
 
 class DatabaseResponse(CloudServiceResponse):
     resource = PolyModelType(DatabaseResource)
@@ -309,6 +311,7 @@ class DatabaseSoftwareImagesResource(BaremetalVMResource):
     _metadata = ModelType(CloudServiceMeta, default=db_image_metadata, serialized_name='metadata')
     name = StringType()
 
+
 class DatabaseSoftwareImagesResponse(CloudServiceResponse):
     resource = PolyModelType(DatabaseSoftwareImagesResource)
 
@@ -319,6 +322,7 @@ class BackupResource(BaremetalVMResource):
     data = ModelType(Backup)
     _metadata = ModelType(CloudServiceMeta, default=db_backup_metadata, serialized_name='metadata')
     name = StringType()
+
 
 class BackupResponse(CloudServiceResponse):
     resource = PolyModelType(BackupResource)

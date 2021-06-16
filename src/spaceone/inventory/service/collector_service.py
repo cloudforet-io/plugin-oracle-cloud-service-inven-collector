@@ -13,7 +13,8 @@ from oci.pagination import list_call_get_all_results
 _LOGGER = logging.getLogger(__name__)
 MAX_WORKER = 10
 SUPPORTED_FEATURES = ['garbage_collection']
-SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType', 'inventory.Region']
+SUPPORTED_RESOURCE_TYPE = ['inventory.CloudService', 'inventory.CloudServiceType',
+                           'inventory.Region', 'inventory.Server']
 FILTER_FORMAT = []
 DEFAULT_REGIONS = ('ap-seoul-1', 'us-ashburn-1', 'ap-chuncheon-1', 'ap-tokyo-1', 'eu-frankfurt-1',
                    'sa-saopaulo-1', 'us-phoenix-1', 'ca-montreal-1', 'uk-london-1', 'me-dubai-1',
@@ -135,6 +136,19 @@ class CollectorService(BaseService):
 
         return params
 
+    @staticmethod
+    def _set_instance_params(secret_data, regions, compartments):
+        params = []
+        for region in regions:
+            params.append({
+                'secret_data': secret_data,
+                'region': region,
+                'compartment': compartments
+            })
+
+        return params
+
+
     @transaction
     @check_required(['options', 'secret_data', 'filter'])
     def list_resources(self, params):
@@ -150,11 +164,11 @@ class CollectorService(BaseService):
         start_time = time.time()
 
         print("[ EXECUTOR START: Oracle Cloud Service ]")
-        key = params['secret_data']
-        #print(key)
         regions, compartments, secret_data = self.get_regions_and_compartment(params['secret_data'])
         multi_thread_params = self._set_multi_thread_params(secret_data, regions, compartments)
+        instance_params = self._set_instance_params(secret_data, regions, compartments)
 
+        # For Cloud Service
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
             # print("[ EXECUTOR START ]")
             future_executors = []
@@ -169,6 +183,25 @@ class CollectorService(BaseService):
                 for mt_params in multi_thread_params:
                     mt_manager = self.locator.get_manager(execute_manager)
                     future_executors.append(executor.submit(mt_manager.collect_resources, mt_params))
+
+            for future in concurrent.futures.as_completed(future_executors):
+                for result in future.result():
+                    yield result.to_primitive()
+
+        # For Instance -> 최적화 필요
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKER) as executor:
+            future_executors = []
+
+            for execute_manager in self.execute_managers:
+                _execute_manager = self.locator.get_manager(execute_manager)
+
+                for cloud_service_type in _execute_manager.collect_cloud_service_type():
+                    yield cloud_service_type.to_primitive()
+
+                print(f'@@@ {execute_manager} @@@')
+                for instance_param in instance_params:
+                    instance_manager = self.locator.get_manager(execute_manager)
+                    future_executors.append(executor.submit(instance_manager.collect_resources, instance_param))
 
             for future in concurrent.futures.as_completed(future_executors):
                 for result in future.result():
