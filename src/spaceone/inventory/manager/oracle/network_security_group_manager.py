@@ -85,6 +85,8 @@ class SecurityGroupManager(OCIManager):
         if security_group.get('protocol') == '17':
             min_port = security_group['udp_options'][direction]["min"]
             max_port = security_group['udp_options'][direction]["max"]
+        if security_group.get('protocol') == 'all':
+            min_port, max_port = 0, 65535
 
         if min_port == max_port:
             port_range = str(min_port)

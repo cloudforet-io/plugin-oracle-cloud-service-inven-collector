@@ -24,7 +24,7 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.compute_client.list_instances, 'response', compartment.id):
                 for instance in response.data:
-                    vm_instance.append(json.dumps(str(instance)))
+                    vm_instance.append(json.loads(json.dumps(str(instance))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST INSTANCE Info]: {e}')
         return vm_instance
@@ -35,9 +35,22 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.compute_client.list_images, 'response', compartment.id):
                 for image in response.data:
-                    result.append(json.dumps(str(image)))
+                    result.append(json.loads(json.dumps(str(image))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST IMAGE Info]: {e}')
+
+        return result
+
+    def list_console_connections(self, compartment):
+        result = []
+        try:
+            for response in list_call_get_all_results_generator(
+                    self.compute_client.list_instance_console_connections, 'response', compartment.id):
+                for connection in response.data:
+                    result.append(json.loads(json.dumps(str(connection))))
+        except ServiceError as e:
+            print(f'[ERROR: OCI LIST CONSOLE CONNECTION Info]: {e}')
+
         return result
 
     def list_vnic(self, compartment):
@@ -76,9 +89,9 @@ class ComputeInstanceConnector(OCIConnector):
         result = []
         try:
             for response in list_call_get_all_results_generator(
-                   self.virtual_network_client.list_subnets):
+                   self.virtual_network_client.list_subnets, 'response', compartment.id):
                 for subnet in response.data:
-                    result.append(json.dumps(str(subnet)))
+                    result.append(json.loads(json.dumps(str(subnet))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST SUBNETS Info]: {e}')
         return result
@@ -89,7 +102,7 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.virtual_network_client.list_vcns, 'response', compartment.id):
                 for vcn in response.data:
-                    result.append(json.dumps(str(vcn)))
+                    result.append(json.loads(json.dumps(str(vcn))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST VCN Info]: {e}')
 
@@ -151,6 +164,19 @@ class ComputeInstanceConnector(OCIConnector):
 
         return volume_response
 
+    def list_ad(self, compartment):
+        result = []
+        try:
+            for response in list_call_get_all_results_generator(
+                    self.identity_client.list_availability_domains, 'response',
+                    compartment_id = compartment.id):
+                for ad in response.data:
+                    result.append(json.loads(json.dumps(str(ad))))
+        except ServiceError as e:
+            print(f'[ERROR: OCI LIST AD Info]: {e}')
+
+        return result
+
     def list_boot_volume(self, availability_domain, compartment):
         result = []
         try:
@@ -158,7 +184,7 @@ class ComputeInstanceConnector(OCIConnector):
                     self.disk_client.list_boot_volumes, 'response',
                     compartment_id=compartment.id, availability_domain=availability_domain):
                 for boot in response.data:
-                    result.append(json.dumps(str(boot)))
+                    result.append(json.loads(json.dumps(str(boot))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST BOOT VOLUME Info]: {e}')
         return result
@@ -169,7 +195,7 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.compute_management_client.list_instance_pools, 'response', compartment.id):
                 for instance_pool in response.data:
-                    result.append(json.dumps(str(instance_pool)))
+                    result.append(json.loads(json.dumps(str(instance_pool))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST INSTANCE POOL Info]: {e}')
         return result
@@ -179,9 +205,9 @@ class ComputeInstanceConnector(OCIConnector):
         try:
             for response in list_call_get_all_results_generator(
                     self.compute_management_client.list_instance_pool_instances,
-                    'response', compartment_id = compartment.id, instance_pool_id = pool_id ):
+                    'response', compartment_id=compartment.id, instance_pool_id=pool_id):
                 for pool_instance in response.data:
-                    result.append(json.dumps(str(pool_instance)))
+                    result.append(json.loads(json.dumps(str(pool_instance))))
 
         except ServiceError as e:
             print(f'[ERROR: OCI LIST INSTANCE POOL INSTANCES Info]: {e}')
@@ -194,7 +220,7 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.virtual_network_client.list_network_security_groups, 'response', compartment.id):
                 for nsg in response.data:
-                    result.append(json.dumps(str(nsg)))
+                    result.append(json.loads(json.dumps(str(nsg))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST NSG Info]: {e}')
         return result
@@ -221,7 +247,7 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.load_balancer_client.list_load_balancers, 'response', compartment.id):
                 for lb in response.data:
-                    result.append(json.dumps(str(lb)))
+                    result.append(json.loads(json.dumps(str(lb))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST LB Info]: {e}')
 
@@ -233,7 +259,7 @@ class ComputeInstanceConnector(OCIConnector):
             for response in list_call_get_all_results_generator(
                     self.network_load_balancer_client.list_network_load_balancers, 'response', compartment.id):
                 for nlb in response.data:
-                    result.append(json.dumps(str(nlb)))
+                    result.append(json.loads(json.dumps(str(nlb))))
         except ServiceError as e:
             print(f'[ERROR: OCI LIST NLB Info]: {e}')
         return result

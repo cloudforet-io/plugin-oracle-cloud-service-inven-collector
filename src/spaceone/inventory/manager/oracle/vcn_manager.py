@@ -24,7 +24,7 @@ class VcnManager(OCIManager):
         return VCN(vcn_response, strict=False), Subnet(subnet, strict=False)
 
     @staticmethod
-    def get_subnet_info(self, subnet_id, subnet_list):
+    def get_subnet_info(subnet_id, subnet_list):
         for subnet in subnet_list:
             if subnet.get('id') == subnet_id:
                 subnet_response = {
