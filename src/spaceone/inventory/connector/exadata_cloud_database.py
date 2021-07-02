@@ -194,7 +194,6 @@ class ExadataCloudDatabaseConnector(OCIConnector):
 
         return result
 
-
     def load_maintenance_run(self, maintenance_run_id, db_system_name):
         try:
             if not maintenance_run_id:

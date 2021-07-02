@@ -38,3 +38,5 @@ class CloudServiceResponse(BaseResponse):
     })
     resource_type = StringType(default='inventory.CloudService')
     resource = PolyModelType(CloudServiceResource)
+
+
