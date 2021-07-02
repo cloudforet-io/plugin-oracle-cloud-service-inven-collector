@@ -49,6 +49,7 @@ class InstanceCollectorManager(OCIManager):
         private_ip_list = []
         image_list = []
         console_connection_list = []
+        instance_ip = ""
 
 
         instance_connector: ComputeInstanceConnector = self.locator.get_connector(self.connector_name, **params)
@@ -93,7 +94,13 @@ class InstanceCollectorManager(OCIManager):
         for instance in instance_list:
             instance_id = instance.get('id')
             matched_vnic_list, primary_ip, nsg_ids = vnic_manager.get_vnic_info(instance_id, vnic_list, private_ip_list)
-            
+
+            if primary_ip is not None:
+                instance_ip = primary_ip
+            primary_vnic = self.get_primary_vnic(matched_vnic_list)
+
+
+
             pass
 
 
@@ -125,6 +132,12 @@ class InstanceCollectorManager(OCIManager):
         for ad in ad_list:
             result.extend(instance_connector.list_boot_volume(ad.get('name'), compartment))
         return result
+
+    def get_primary_vnic(self, vnic_list):
+        for vnic in vnic_list:
+            if vnic.is_primary:
+                return vnic
+        return None
 
 
 

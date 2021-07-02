@@ -18,11 +18,11 @@ if OCI_CREDENTIALS_PATH is None:
         ##################################################
         # ERROR 
         #
-        # Configure your GCP credential first for test
+        # Configure your OCI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  credential first for test
         # https://console.cloud.google.com/apis/credentials
         ##################################################
         example)
-        export GOOGLE_APPLICATION_CREDENTIALS="<PATH>" 
+        export OCI_APPLICATION_CREDENTIALS="<PATH>" 
     """)
     exit
 

@@ -60,7 +60,7 @@ dbsystem_network = ItemDynamicLayout.set_fields('Network', fields= [
     })
 ])
 
-dbsystem_database = TableDynamicLayout.set_fields('Databses', root_path='data.list_database', fields=[
+dbsystem_database = TableDynamicLayout.set_fields('Databases', root_path='data.list_database', fields=[
     TextDyField.data_source('Name', 'db_name'),
     EnumDyField.data_source('State', 'lifecycle_state', default_state={
         'safe': ['AVAILABLE'],
